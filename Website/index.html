@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Monetally</title>
+
+        <link rel="stylesheet" href="styles/default.css">
+        <link rel="stylesheet" href="login.css">
+    </head>
+
+    <body>
+        <div class="nav-bar">
+            <p class="nav-name">
+                Monetally
+            </p>
+        </div>
+
+
+
+        <div class="login-box">
+            <form class="login-box">
+                <label for="username">Username</label>
+                <input class="input" type="text" id="username">
+
+                <label for="password">Password</label>
+                <input class="input" type="text" id="password">
+
+                <label class="create-account hidden" for="confirm-password">Confirm Password</label>
+                <input class="input create-account hidden" type="text" id="confirm-password">
+            </form>
+
+        
+            <button class="login-button login" id="login">
+                Login
+            </button>
+            <button class="login-button login" id="new-account">
+                Create New Account
+            </button>
+
+
+            <button class="login-button hidden" id="create-account">
+                Create Account
+            </button>
+            <button class="login-button hidden" id="back"> 
+                Back
+            </button>
+        </div>
+
+        
+        <script src="scripts/user-data.js"></script>
+        <script src="login.js"></script>
+    </body>
+</html>

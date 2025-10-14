@@ -1,0 +1,80 @@
+
+ul {
+    width: 80%;
+    list-style: none;
+
+    
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+
+    margin: 0;
+    margin-left: 1%;
+
+    margin-bottom: 15px;
+}
+
+li {
+    margin-top: 4px;
+    text-align: left;
+}
+
+
+
+.graphic-section {
+    margin: 100px;
+}
+
+/* ##### HOME PAGE FINANCE INFO ##### */
+.finance-section {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+
+.finance-box {
+    justify-content: space-around;
+    flex-direction: column;
+
+    align-items: flex-start;
+    
+    width: 40%;
+}
+
+.finance-header {
+    width: 100%;
+
+    background-color: #454849;
+    padding-top: 15px;
+    padding-bottom: 15px;
+
+    margin: 0px;
+    margin-bottom: 10px;
+
+    font-size: xx-large;
+    font-weight: bolder;
+    text-shadow: 1px 1px 4px black;
+
+    border-radius: 25px;
+    border-style: solid;
+    border-width: 4px;
+}
+
+.finance-category {
+    align-self: center;
+    width: 90%;
+
+    font-weight: bold;
+
+    background-color: #454849;
+    border-width: 2px;
+    border-radius: 10px;
+}
+
+.income-text {
+    color: rgb(47, 255, 47);
+}
+
+.expense-text {
+    color: red;
+}

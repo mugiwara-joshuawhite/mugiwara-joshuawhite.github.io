@@ -1,0 +1,44 @@
+.notification-page {
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.notification-tabs {
+    width: 25%;
+
+    background-color: #565a5c;
+}
+
+.notification-details {
+    width: 75%;
+}
+
+.notification-title {
+    font-size: xx-large;
+    font-weight: bold;
+
+    margin: 5px;
+
+}
+
+.bar {
+    height: 2px;
+    background-color: #565a5c;
+}
+
+
+.notification-list {
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+/* TODO: This doesn't align propery*/
+.categories {
+    margin: 0;
+    padding: 0;
+    display: flex;
+
+}
