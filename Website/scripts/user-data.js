@@ -37,19 +37,46 @@ class Account
      */
     constructor(userData)
     {
-        this.name = userData.name;
-        this.password = userData.password;
-
-        // Make array if notifications aren't defined yet
-        if (userData.notifications)
-            this.notifications = userData.notifications;
-        else
-            this.notifications = [];
+        if (userData)
+            this.load(userData); 
     }
 
-    hello()
+    /**
+     * Load data from json file
+     * @param {string} userData JSON formatted user data
+     */
+    load(userData)
     {
-        console.log('hi');
+        if (userData)
+        {
+            this.name = userData.name;
+            this.password = userData.password;
+
+            // Make array if notifications aren't defined yet
+            if (userData.notifications)
+                this.notifications = userData.notifications;
+            else
+                this.notifications = []; 
+        }
+
+        this.save()
+    }
+
+    /**
+     * Save current user data to session storage
+     */
+    save()
+    {
+        sessionStorage.setItem('account', JSON.stringify(this));
+    }
+
+    /**
+     * Reload user data from session storage
+     */
+    reload()
+    {
+        let accountJSON = JSON.parse(sessionStorage.getItem('account'));
+        this.load(accountJSON);
     }
 }
 
@@ -71,3 +98,7 @@ class UserNotification
         this.priority = priority;
     }
 }
+
+// Global account definition to avoid having to re use it over and over
+let account = new Account();
+account.reload(); // always refresh the account to have the current data entering a page

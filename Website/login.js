@@ -6,6 +6,7 @@
  */
 
 
+
 /**
  * login function triggered by login button.
  * if valid login take user to home page
@@ -23,9 +24,7 @@ function login()
         "password": "1234"
     }
 
-    account = new Account(accountJSON);
-
-    loadAccount(account);
+    account.load(accountJSON);
 }
 
 
@@ -68,16 +67,6 @@ function createAccount()
 }
 
 /**
- * Load the account to session storage (deleted after use exits page)
- * @param {Account} account User account
- * @returns nothing
- */
-function loadAccount(account)
-{
-    sessionStorage.setItem('Account', JSON.stringify(account));
-}
-
-/**
  * Main function, mainly here to control scope of variables
  * But also to tidy up the script. 
  * Primarily binds the buttons of the login page to their respective function
@@ -96,6 +85,5 @@ function main()
     backButton.addEventListener('click', toggleAccountCreation);
     createAccountButton.addEventListener('click', createAccount);
 }
-
 
 main(); // call main

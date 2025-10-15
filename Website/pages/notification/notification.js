@@ -45,9 +45,8 @@ function addNotifications(account)
 
     account.notifications.push(notification)
 
-    sessionStorage.setItem('Account', JSON.stringify(account));
+    account.save();
 
-    console.log(account);
     loadNotifications(account);
 }
 
@@ -59,10 +58,6 @@ function addNotifications(account)
  */
 function main()
 {
-    // Load account in json format parsed as an object
-    let accountJSON = JSON.parse(sessionStorage.getItem('Account'));
-    let account = new Account(accountJSON);
-
     //loadNotifications(account);
     addNotifications(account);
 }
