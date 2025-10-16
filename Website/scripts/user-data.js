@@ -47,129 +47,32 @@ class Account
     }
 
     /**
-     * Save current account to IndexedDB storage
+     * Save to origin private file system
      */
-    saveToStorage()
+    async saveToStorage()
     {
-        // Open account database from indexedDB, with version '1'
-        const request = indexedDB.open('AccountDatabase', 1);
-        const thisAccount = this;
+        // Open root directory, and get file handle to store data in
+        const root = await navigator.storage.getDirectory();
+        const testFile = await root.getFileHandle("account.json", {create: true});
+        const writableFile = await testFile.createWritable();
 
-        // If request gives error, indicate error occured
-        request.onerror = function() { console.error('IndexedDB error occured'); }
-
-        // If database needs to be created then form database
-        // of correct pattern
-        request.onupgradeneeded = function() 
-        {
-            const database = request.result; // obtain database
-
-            // Define storage pattern. We want to store an account. Accounts are indexed by id
-            const store = database.createObjectStore('account', { keyPath: 'id' });
-        }
-
-        // On successful request, open database
-        // and store account
-        request.onsuccess = function () 
-        {
-            // Open database holding account information
-            const database = request.result;
-            const transaction = database.transaction('account', 'readwrite');
-            const store = transaction.objectStore('account');
-
-            // Convert account to JSON object for storage
-            const accountString = JSON.stringify(thisAccount);
-            const accountJSON = JSON.parse(accountString);
-
-            // put current account into storage at index 0
-            store.put({ id: 0, account: accountJSON });
-
-            // Do any operations on successful save
-            thisAccount.onSaveSuccess();
-        }
-    }
-
-    
-    /**
-     * Load account from IndexedDB storage
-     */
-    loadFromStorage()
-    {
-        // Open account database from indexedDB, with version '1'
-        const request = indexedDB.open('AccountDatabase', 1);
-        let thisAccount = this; // retain reference to this Account
-
-        // If request gives error, indicate error occured
-        request.onerror = function() { console.error('IndexedDB error occured'); }
-
-        // When request succeeds, load account and perform operation defined by
-        // onLoadSuccess
-        request.onsuccess = function () 
-        {
-            // Open database holding account information
-            const database = request.result;
-            const transaction = database.transaction('account', 'readwrite');
-            const store = transaction.objectStore('account');
-
-            // get the current account from the store at id 0
-            const query = store.get(0);
-
-            // When query succeeds, load the stored account
-            // and after loading, perform operation defined as needed
-            query.onsuccess = function()
-            {
-                thisAccount.load(query.result.account);
-                thisAccount.onLoadSuccess();
-            }
-        }
+        await writableFile.write(`${JSON.stringify(this)}`);
+        await writableFile.close();
     }
 
     /**
-     * Override this function with what you want to do when the account is loaded from the database
+     * Load from origin private file system
      */
-    onLoadSuccess()
+    async loadFromStorage()
     {
-        console.error(`You forgot to reassign this!
-            Do operations with the loaded account data by reassigning
-            onLoad success like this! Otherwise loading does nothing!
-            account.onLoadSuccess = function ()
-            {
-                // DO STUFF HERE WITH ACCOUNT
-            }
-            `);
+        const root = await navigator.storage.getDirectory();
+        const testFile = await root.getFileHandle("account.json");
+
+        // Read the file and load the account
+        const readableFile = await testFile.getFile();
+        const accountJSON = JSON.parse(await readableFile.text());
+        this.load(accountJSON);
     }
-
-    /**
-     * Perform any operations on successful save as defined later
-     * Override this with desired behaviors
-     */
-    onSaveSuccess()
-    {
-        /* If you want to perform any operations on save, then override
-            onSaveSuccess by doing something like:
-            account.onSaveSuccess = function ()
-            {
-                // DO STUFF HERE WITH ACCOUNT
-            }
-        */
-    }
-
-    /**
-     * Save current user data to storage
-     */
-    // save()
-    // {
-    //     sessionStorage.setItem('account', JSON.stringify(this));
-    // }
-
-    /**
-     * Reload user data from storage.
-     */
-    // loadFromStorage()
-    // {
-    //     let accountJSON = JSON.parse(sessionStorage.getItem('account'));
-    //     this.load(accountJSON);
-    // }
 }
 
 /**
@@ -190,3 +93,4 @@ class UserNotification
         this.priority = priority;
     }
 }
+

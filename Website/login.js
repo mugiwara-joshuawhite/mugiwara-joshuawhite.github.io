@@ -13,12 +13,12 @@
  * @param none
  * @returns nothing
  */
-function login()
+async function login()
 {
     createAccount(); // TODO: delete this when login logic is ready. Account's aren't created here
 
     // TODO: Put actual login logic here,
-    let account = new Account()
+    //let account = new Account()
 
     // Load user file
 
@@ -29,10 +29,8 @@ function login()
     // bring user to home page
 
     // Move user to the home page
-    account.onSaveSuccess = function ()
-    {
-        window.location.href = '/pages/home';
-    }
+    //await account.saveToStorage();
+    window.location.href = '/pages/home';
 }
 
 
@@ -69,17 +67,13 @@ function toggleAccountCreation()
  * @param none
  * @returns nothing
  */
-function createAccount()
+async function createAccount()
 {
     let account = new Account('Test User', '1234');
-    account.saveToStorage();
-
 
     // Wait for account to be saved before moving to home page
-    account.onSaveSuccess = function ()
-    {
-        window.location.href = '/pages/home';
-    }
+    await account.saveToStorage();
+    window.location.href = '/pages/home';
 }
 
 /**

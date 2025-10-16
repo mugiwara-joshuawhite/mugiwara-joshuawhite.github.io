@@ -60,21 +60,12 @@ function addNotifications(account)
  * @param none
  * @returns nothing
  */
-function main()
+async function main()
 {
     let account = new Account();
-    account.loadFromStorage(); // Load any currently stored data in storage
-    
-    account.onLoadSuccess = function ()
-    {
+    await account.loadFromStorage();
 
-        // bind button here with account as paramenter?
-
-        //i.e. bind button to function () { addNotification (account); }
-
-        //loadNotifications(account);
-        addNotifications(account);
-    }
+    addNotifications(account);
 }
 
 main()
