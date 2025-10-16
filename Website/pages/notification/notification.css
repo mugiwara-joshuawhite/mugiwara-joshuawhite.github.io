@@ -1,4 +1,6 @@
 .notification-page {
+    height: 95vh;
+
     display: flex;
     flex-direction: row;
     
@@ -11,6 +13,8 @@
 }
 
 .notification-details {
+    display: flex;
+    flex-direction: column;
     width: 75%;
 }
 
@@ -23,7 +27,7 @@
 }
 
 .bar {
-    height: 2px;
+    height: 1px;
     background-color: #565a5c;
 }
 
@@ -31,6 +35,8 @@
 .notification-list {
     margin: 0;
     padding: 0;
+
+    overflow-y: scroll;
 
     list-style: none;
 }
@@ -40,5 +46,19 @@
     margin: 0;
     padding: 0;
     display: flex;
+}
 
+.notification-text {
+    padding: 10px;
+    margin: 0;
+    flex: 3;
+    text-align: left;
+}
+
+.date-text {
+    padding: 10px;
+    margin: 0;
+
+    flex: 1;
+    text-align: left;
 }

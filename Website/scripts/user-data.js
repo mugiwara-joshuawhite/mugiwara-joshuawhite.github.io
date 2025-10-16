@@ -102,16 +102,6 @@ class Account
         // If request gives error, indicate error occured
         request.onerror = function() { console.error('IndexedDB error occured'); }
 
-        // If database needs to be created then form database
-        // of correct pattern
-        request.onupgradeneeded = function() 
-        {
-            const database = request.result; // obtain database
-
-            // Define storage pattern. We want to store an account. Accounts are indexed by id
-            const store = database.createObjectStore('account', { keyPath: 'id' });
-        }
-
         // When request succeeds, load account and perform operation defined by
         // onLoadSuccess
         request.onsuccess = function () 
@@ -122,7 +112,7 @@ class Account
             const store = transaction.objectStore('account');
 
             // get the current account from the store at id 0
-            const query = store.get(0); 
+            const query = store.get(0);
 
             // When query succeeds, load the stored account
             // and after loading, perform operation defined as needed

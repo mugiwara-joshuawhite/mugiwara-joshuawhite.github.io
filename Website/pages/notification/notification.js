@@ -15,11 +15,15 @@ function loadNotifications(account)
 {
     const notifications = account.notifications;
     const notificationList = document.querySelector('.notification-list'); 
+    notificationList.innerHTML = '';
 
     for(let i = 0; i < notifications.length; i++)
     {
         let notification = document.createElement('li');
+        let divider = document.createElement('div');
+        
         notification.classList.add('categories');
+        divider.classList.add('bar');
 
         let date = new Date(notifications[i].date);
 
@@ -27,11 +31,12 @@ function loadNotifications(account)
         // TODO: use inner html to make this pretty
         // Closing tags?
         notification.innerHTML = `
-        <p style="flex: 3;"> ${notifications[i].text}
-        <p style="flex: 1;"> ${date.toDateString()}
+        <p class="notification-text"> ${notifications[i].text}
+        <p class="date-text"> ${date.toDateString()}
         `;
 
         notificationList.appendChild(notification);
+        notificationList.appendChild(divider);
     }
 }
 
@@ -62,6 +67,7 @@ function main()
     
     account.onLoadSuccess = function ()
     {
+
         // bind button here with account as paramenter?
 
         //i.e. bind button to function () { addNotification (account); }
