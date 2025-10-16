@@ -62,6 +62,10 @@ function main()
     
     account.onLoadSuccess = function ()
     {
+        // bind button here with account as paramenter?
+
+        //i.e. bind button to function () { addNotification (account); }
+
         //loadNotifications(account);
         addNotifications(account);
     }

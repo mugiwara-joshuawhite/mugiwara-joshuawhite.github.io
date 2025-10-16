@@ -28,8 +28,6 @@ function login()
 
     // bring user to home page
 
-    
-
     // Move user to the home page
     account.onSaveSuccess = function ()
     {

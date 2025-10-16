@@ -14,7 +14,8 @@ class Account
     /**
      * Use constructor to make a fresh account, otherwise use Account method load
      * to load user data
-     * @param {Object} userData JSON formatted data parsed as an object
+     * @param {string} name username of account
+     * @param {string} password password of account
      */
     constructor(name, password)
     {
