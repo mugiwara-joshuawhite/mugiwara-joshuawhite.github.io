@@ -49,6 +49,7 @@ class Account
      */
     saveToStorage()
     {
+        // Open account database from indexedDB, with version '1'
         const request = indexedDB.open('AccountDatabase', 1);
         const thisAccount = this;
 
@@ -59,16 +60,18 @@ class Account
         // of correct pattern
         request.onupgradeneeded = function() 
         {
-            const db = request.result;
-            const store = db.createObjectStore('account', { keyPath: 'id' });
+            const database = request.result; // obtain database
+            // Define storage pattern. We want to store an account. Accounts are indexed by id
+            const store = database.createObjectStore('account', { keyPath: 'id' });
         }
 
-        //
+        // On successful request, open database
+        // and store account
         request.onsuccess = function () 
         {
-            const db = request.result;
+            const database = request.result; // obtain database
             // Open account database for reading and writign
-            const transaction = db.transaction('account', 'readwrite');
+            const transaction = database.transaction('account', 'readwrite');
             // Open a store for the account
             const store = transaction.objectStore('account');
             // Convert account to JSON string for storage
@@ -85,6 +88,7 @@ class Account
      */
     loadFromStorage()
     {
+        // Open account database from indexedDB, with version '1'
         const request = indexedDB.open('AccountDatabase', 1);
         let thisAccount = this;
 
@@ -95,15 +99,16 @@ class Account
         // of correct pattern
         request.onupgradeneeded = function() 
         {
-            const db = request.result;
-            const store = db.createObjectStore('account', { keyPath: 'id' });
+            const database = request.result; // obtain database
+            // Define storage pattern. We want to store an account. Accounts are indexed by id
+            const store = database.createObjectStore('account', { keyPath: 'id' });
         }
 
         // When request succeeds, load account and perform operation defined by
         // onLoadSuccess
         request.onsuccess = function () 
         {
-            const db = request.result;
+            const db = request.result; // obtain database
             // Open account database for reading and writign
             const transaction = db.transaction('account', 'readwrite');
             // Open a store for the account
@@ -117,11 +122,6 @@ class Account
             {
                 thisAccount.load(query.result.account);
                 thisAccount.onLoadSuccess();
-
-                if (! thisAccount)
-                {
-                    window.location.href = '';
-                }
             }
         }
     }
