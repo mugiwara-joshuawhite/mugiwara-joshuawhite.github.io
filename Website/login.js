@@ -30,7 +30,7 @@ async function login()
 
     // Move user to the home page
     //await account.saveToStorage();
-    window.location.href = '/pages/home';
+    //window.location.href = '/pages/home';
 }
 
 
