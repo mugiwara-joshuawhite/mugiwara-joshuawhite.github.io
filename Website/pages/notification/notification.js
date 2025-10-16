@@ -44,7 +44,7 @@ function addNotifications(account)
     let notification = new UserNotification('This is a notification', new Date());
 
     account.notifications.push(notification)
-    account.save();
+    account.saveToStorage();
 
     loadNotifications(account);
 }
@@ -59,9 +59,11 @@ function main()
 {
     let account = new Account();
     account.loadFromStorage(); // Load any currently stored data in storage
-
-    //loadNotifications(account);
-    addNotifications(account);
+    account.onLoadSuccess = function ()
+    {
+        //loadNotifications(account);
+        addNotifications(account);
+    }
 }
 
 main()

@@ -15,19 +15,22 @@
  */
 function login()
 {
+    createAccount(); // TODO: delete this when login logic is ready. Account's aren't created here
+
+    // TODO: Put actual login logic here,
+
+    // Load user file
+
+    // user login details match?
+
+    // Save user data to webpage 
+
+    // bring user to home page
+
+    
+
+    // Move user to the home page
     window.location.href = '/pages/home';
-
-    let account = new Account();
-
-    // TODO: actual login logic
-
-    const accountJSON = {
-        "name": "TestName",
-        "password": "1234"
-    }
-
-    account.load(accountJSON);
-    account.save();
 }
 
 
@@ -66,7 +69,8 @@ function toggleAccountCreation()
  */
 function createAccount()
 {
-
+    let account = new Account('Test User', '1234');
+    account.saveToStorage();
 }
 
 /**
