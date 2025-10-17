@@ -17,10 +17,27 @@ async function linkDownloadButton()
 }
 
 /**
+ * Clear user data and return to home page
+ */
+async function clearStorage()
+{
+    let account = new Account();
+    await account.clearStorage();
+
+    window.location.href = "/";
+}
+
+
+/**
  * Main function, controls scope of page elements
  */
-function main()
+async function main()
 {
+    const clearDataButton = document.querySelector('#clear-data')
+    
+    clearDataButton.addEventListener('click', clearStorage);
+
+
     linkDownloadButton();
 }
 

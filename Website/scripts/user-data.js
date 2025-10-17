@@ -82,6 +82,10 @@ class Account
             const accountJSON = JSON.parse(await readableFile.text());
             this.load(accountJSON);
         }
+        else // no data, go back to root (login page).
+        {
+            window.location.href = "/";
+        }
     }
 
     /**

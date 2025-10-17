@@ -58,10 +58,9 @@ async function login()
         // if name or username is incorrect then give invalid login
         if (account.name !== username || account.password !== password)
         {
-            errorText.innerHTML = `Invalid Login, Please Try Again. 
-            (If you have no account, create one)`;
+            errorText.innerHTML = `Invalid Login, Please Try Again.`;
+            
             errorText.classList.remove(`hidden`);
-
             usernameInput.classList.add('red-border');
             passwordInput.classList.add('red-border');
         }
