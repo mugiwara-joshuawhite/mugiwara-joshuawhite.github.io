@@ -13,10 +13,11 @@
                 Monetally
             </p>
         </div>
-
-
+        
 
         <div class="login-box">
+            
+            <!-- Text input fields-->
             <form class="login-box">
                 <label for="username">Username</label>
                 <input class="input" type="text" id="username">
@@ -24,11 +25,11 @@
                 <label for="password">Password</label>
                 <input class="input" type="text" id="password">
 
-                <label class="create-account hidden" for="confirm-password">Confirm Password</label>
-                <input class="input create-account hidden" type="text" id="confirm-password">
+                <label class="create hidden" for="confirm-password">Confirm Password</label>
+                <input class="input create hidden" type="text" id="confirm-password">
             </form>
 
-        
+            <!-- Login account buttons -->
             <button class="login-button login" id="login">
                 Login
             </button>
@@ -36,15 +37,20 @@
                 Create New Account
             </button>
 
-
-            <button class="login-button hidden" id="create-account">
+            <!-- Create account buttons -->
+            <button class="login-button create hidden" id="create-account">
                 Create Account
             </button>
-            <button class="login-button hidden" id="back"> 
+            <button class="login-button create hidden" id="back"> 
                 Back
             </button>
         </div>
 
+        <!-- Account File input field -->
+        <p class="login"> <strong> Input User Account File for Login.  </strong> </p>
+        <input type="file" id="user-file" class="file-input login">
+
+        <p class="error-text hidden"> This is an error </p>
         
         <script src="scripts/user-data.js"></script>
         <script src="login.js"></script>

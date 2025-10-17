@@ -95,4 +95,3 @@ class UserNotification
         this.priority = priority;
     }
 }
-

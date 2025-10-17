@@ -10,7 +10,6 @@
     width: fit-content;
 }
 
-
 .input {
     background-color: black;
     border-color: #454849;
@@ -25,4 +24,22 @@
     background-color: black;
     border-color: #cfb87c;
     width: 100%;
+}
+
+.file-input {
+    padding: 20px;
+    border-style: dashed;
+    border-color: #cfb87c;
+    background-color: black;
+}
+
+.error-text {
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+    color: red;
+}
+
+.red-border {
+    border-color: red;
 }
