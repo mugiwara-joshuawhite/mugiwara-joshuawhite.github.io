@@ -57,8 +57,6 @@ function addNotifications(account)
 
 /**
  * Main function, limits scope.
- * @param none
- * @returns nothing
  */
 async function main()
 {

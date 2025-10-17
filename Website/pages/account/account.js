@@ -1,3 +1,6 @@
+/**
+ * Link download button to download anchor element
+ */
 async function linkDownloadButton()
 {
     const downloadAnchor = document.querySelector('#download-button')
@@ -12,6 +15,9 @@ async function linkDownloadButton()
     downloadAnchor.href = fileURL;
 }
 
+/**
+ * Main function, controls scope of page elements
+ */
 function main()
 {
     linkDownloadButton();

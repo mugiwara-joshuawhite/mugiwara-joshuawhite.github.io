@@ -9,8 +9,6 @@
 /**
  * login function triggered by login button.
  * if valid login take user to home page
- * @param none
- * @returns nothing
  */
 async function login()
 {
@@ -26,6 +24,49 @@ async function login()
     // Load user file from input if file is given
     const file = fileInput.files[0]
 
+    // if valid file was given verify account details
+    if (validJSONFile(file))
+    {
+        fileInput.classList.remove('red-border');
+
+        // Load file information
+        const fileText = await file.text();
+        const accountJSON = JSON.parse(fileText);
+        account.load(accountJSON);
+
+        // Validate user credentials
+        // if name or username is incorrect then give invalid login
+        if (account.name !== username || account.password !== password)
+        {
+            errorText.innerHTML = `Invalid Login, Please Try Again.`;
+            errorText.classList.remove(`hidden`);
+
+            usernameInput.classList.add('red-border');
+            passwordInput.classList.add('red-border');
+        }
+        else // Correct login, save account and move to hompage
+        {
+            await account.saveToStorage();
+            window.location.href = '/pages/home';
+        }
+    }
+    else // Invalid input file, put red border to indicate invalid file
+    {
+        usernameInput.classList.remove('red-border');
+        passwordInput.classList.remove('red-border');
+        errorText.classList.add(`hidden`);
+
+        fileInput.classList.add('red-border');
+    }
+}
+
+/**
+ * check if file given is a valid json file
+ * @param {File} file check if file is a valid JSON file
+ * @returns {bool} validFile boolean value indicating whether JSON file is valid
+ */
+function validJSONFile(file)
+{
     let validFile = false;
 
     // If json file is given load it
@@ -34,42 +75,11 @@ async function login()
         // Check if valid file was given
         if (file.name.includes('.json'))
         {
-            const fileJSON = await fileInput.files[0].text();
-            const accountJSON = JSON.parse(fileJSON);
-            account.load(accountJSON);
             validFile = true;
         }
-        else // invalid file
-        {
-            fileInput.classList.add('red-border');
-        }
-    }
-    else // invalid file
-    {
-        fileInput.classList.add('red-border');
     }
 
-    // if valid file was given verify account details
-    if (validFile)
-    {
-        if (account.name !== username)
-        {
-            errorText.innerHTML = `Invalid Login, Please Try Again.`
-            fileInput.classList.add('red-border');
-            errorText.classList.remove(`hidden`);
-        }
-        else if (account.password !== password)
-        {
-            errorText.innerHTML = `Invalid Login, Please Try Again.`
-            fileInput.classList.add('red-border');
-            errorText.classList.remove(`hidden`);
-        }
-        else // Correct login, save account and mvoe to hompage
-        {
-            await account.saveToStorage();
-            window.location.href = '/pages/home';
-        }
-    }
+    return validFile;
 }
 
 
@@ -79,8 +89,6 @@ async function login()
  * Create account button is pressed, check if valid username/password
  * was given, create the account and send the user to the home page
  * as a new user
- * @param none
- * @returns nothing
  */
 async function createAccount()
 {
@@ -133,12 +141,11 @@ async function createAccount()
     }
 }
 
+
 /**
  * Toggle whethere new account creation is shown
  *  Login is hidden during creation
  *  Creation is hidden during login
- * @param none
- * @returns nothing
  */
 function toggleAccountCreation()
 {
@@ -187,8 +194,6 @@ function hideErrors(elements)
  * Main function, mainly here to control scope of variables
  * But also to tidy up the script. 
  * Primarily binds the buttons of the login page to their respective function
- * @param none
- * @returns nothing
  */
 function main()
 {
