@@ -114,5 +114,6 @@ class UserNotification
         this.text = text;
         this.date = date;
         this.priority = priority;
+        this.isRead = false;
     }
 }

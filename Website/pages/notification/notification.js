@@ -15,7 +15,7 @@ function loadNotifications(account)
 {
     const notifications = account.notifications;
     const notificationList = document.querySelector('.notification-list'); 
-    notificationList.innerHTML = '';
+    notificationList.innerHTML = ''; // clear current notifications displayed
 
     for(let i = 0; i < notifications.length; i++)
     {
@@ -27,7 +27,6 @@ function loadNotifications(account)
 
         let date = new Date(notifications[i].date);
 
-
         // TODO: use inner html to make this pretty
         // Closing tags?
         notification.innerHTML = `
@@ -35,6 +34,9 @@ function loadNotifications(account)
         <p class="date-text"> ${date.toDateString()}
         `;
 
+        notification.innerHTML = 
+            `<input type="checkbox" class="hidden checkbox" id="checkbox-${i}">`
+            + notification.innerHTML;
         notificationList.appendChild(notification);
         notificationList.appendChild(divider);
     }
@@ -55,15 +57,44 @@ function addNotifications(account)
 }
 
 
+function modifyNotifications(account)
+{
+    const checkboxes = document.querySelectorAll(".checkbox")
+    const notificationList = document.querySelectorAll('li');
+
+    
+
+    // for(let i = 0; i < notificationList.length; i++)
+    // {
+    //     notificationList[i].innerHTML = notificationList[i].innerHTML.replace(`<p`, `'<input type="text"`);
+    //     notificationList[i].innerHTML = notificationList[i].innerHTML.replace(`<\p>`, ``);
+    //     notificationList[i].innerHTML = notificationList[i].innerHTML.replace(`class="`, `class="input `);
+    // }
+}
+
+
 /**
  * Main function, limits scope.
  */
 async function main()
 {
+    const addButton = document.querySelector('#add-button');
+    const modifyButton = document.querySelector('#modify-button');
+
     let account = new Account();
     await account.loadFromStorage();
 
-    addNotifications(account);
+    //
+    addButton.addEventListener('click', function (){
+        addNotifications(account);
+    })
+
+    //
+    modifyButton.addEventListener('click', function (){
+        modifyNotifications(account);
+    })
+
+    loadNotifications(account);
 }
 
 main()

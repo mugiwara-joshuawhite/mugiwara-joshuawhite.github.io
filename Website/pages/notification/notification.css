@@ -62,3 +62,10 @@
     flex: 1;
     text-align: left;
 }
+
+.input {
+    background-color: black;
+    border-color: #454849;
+    width: 100%;
+    margin-bottom: 10px;
+}
