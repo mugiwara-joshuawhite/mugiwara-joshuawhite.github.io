@@ -114,5 +114,4 @@ class UserNotification
     }
 }
 
-
 let account = new Account();

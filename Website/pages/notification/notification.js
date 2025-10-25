@@ -42,18 +42,35 @@ function loadNotifications()
 }
 
 /**
- * add notification data to user account
+ * open window to add notifications
  */
-function addNotifications()
+function openAddNotifications()
+{
+    const createBox = document.querySelector(".create-box");
+
+    createBox.classList.remove('hidden');
+}
+
+
+function closeAddNotification()
+{
+    const createBox = document.querySelector(".create-box");
+
+    createBox.classList.add('hidden');
+}
+
+function addNotification()
 {
     let notification = new UserNotification('This is a notification', new Date());
+    const notificationTextBox = document.querySelector('#notification-text');
 
-    account.notifications.push(notification)
+    account.notifications.push(notification);
     account.saveToStorage();
 
     loadNotifications(account);
-}
 
+    closeAddNotification();
+}
 
 /**
  * Modify notifications of user account
@@ -82,11 +99,19 @@ async function main()
     const addButton = document.querySelector('#add-button');
     const modifyButton = document.querySelector('#modify-button');
 
+    // Notification creation buttons
+    const addNotificationButton = document.querySelector('#add-notification');
+    const cancelNotificationButton = document.querySelector('#cancel-notification');
+
     // Add notification to account on addButton press
-    addButton.addEventListener('click', addNotifications)
+    addButton.addEventListener('click', openAddNotifications)
 
     // Modify notifications of account on button press
     modifyButton.addEventListener('click', modifyNotifications)
+
+    addNotificationButton.addEventListener('click', addNotification);
+    cancelNotificationButton.addEventListener('click', closeAddNotification);
+
 
     loadNotifications(account);
 }

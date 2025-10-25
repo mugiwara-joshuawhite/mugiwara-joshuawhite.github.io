@@ -23,6 +23,23 @@
         </div>
         <!-- TODO: Find a way to not have to duplicate this each page -->
 
+        <!-- Notification creation interaction -->
+        <dialog open class="create-box hidden">
+            <label for="notification-text" style="font-weight: bold;">Notification Text</label>
+            <textarea class="text-input" id="notification-text"></textarea>
+
+            <div class="notification-detail-box">
+                <label for="notification-date" style="font-weight: bold;">Date</label>
+                <input type="date" class="date-input" id="notification-date">
+
+                <input type="checkbox" id="notification-important">
+                <label for="notification-important" style="font-weight: bold;">Important</label>
+            </div>
+
+            <button class="button" id="add-notification"> Add </button>
+            <button class="button" id="cancel-notification"> Cancel </button>
+        </dialog>
+
         <!-- NOTIFICATION PAGE -->
         <div class="notification-page">
             <div class="notification-tabs">
@@ -50,22 +67,7 @@
             
         </div>
 
-        <!-- Notification creation interaction -->
-        <dialog open class="create-box">
-            <label for="text" style="font-weight: bold;">Notification Text</label>
-            <textarea class="text-input" id="text"></textarea>
-
-            <div class="notification-detail-box">
-                <label for="date" style="font-weight: bold;">Date</label>
-                <input type="date" class="date-input" id="date">
-
-                <input type="checkbox" id="important">
-                <label for="important" style="font-weight: bold;">Important</label>
-            </div>
-
-            <button class="button"> Add </button>
-            <button class="button"> Cancel </button>
-        </dialog>
+        
         
         <script src="../../scripts/user-data.js"></script>
         <script src="notification.js"></script>
