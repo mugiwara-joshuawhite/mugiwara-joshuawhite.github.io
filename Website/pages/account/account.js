@@ -3,8 +3,6 @@
  */
 async function linkDownloadButton()
 {
-    await account.loadFromStorage();
-    console.log(account);
     const downloadAnchor = document.querySelector('#download-button')
     const key = account.name + account.password
     
@@ -33,6 +31,7 @@ async function clearStorage()
  */
 async function main()
 {
+    await account.loadFromStorage();
     const clearDataButton = document.querySelector('#clear-data')
     
     clearDataButton.addEventListener('click', clearStorage);
