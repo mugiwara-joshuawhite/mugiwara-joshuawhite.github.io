@@ -85,7 +85,7 @@ class Account
     }
 
     /**
-     * Use this to clear entire storage
+     * Use this to clear account file from storage
      */
     async clearStorage()
     {
@@ -103,13 +103,13 @@ class UserNotification
      * 
      * @param {string} text - notification text
      * @param {string} date - notification date
-     * @param {int} priority - priority to make important notifications appear first
+     * @param {bool} important - Flag to indiciate notification is important
      */
-    constructor(text, date, priority = 0) 
+    constructor(text, date, important) 
     {
         this.text = text;
         this.date = date;
-        this.priority = priority;
+        this.important = important;
         this.isRead = false;
     }
 }
