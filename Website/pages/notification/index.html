@@ -31,22 +31,21 @@
             <div class="notification-detail-box">
                 <label for="notification-date" style="font-weight: bold;">Date</label>
                 <input type="date" class="date-input" id="notification-date">
-
-                <input type="checkbox" id="notification-important">
-                <label for="notification-important" style="font-weight: bold;">Important</label>
             </div>
 
             <button class="button" id="add-notification"> Add </button>
+            <button class="button" id="modify-notification"> Modify </button>
             <button class="button" id="cancel-notification"> Cancel </button>
+
+            <p class="error-text hidden"> Error Text </p>
         </dialog>
 
         <!-- NOTIFICATION PAGE -->
         <div class="notification-page">
             <div class="notification-tabs">
-                <button class="button" id="add-button"> Add Notification
-                    
-                </button>
+                <button class="button" id="add-button"> Add Notification</button>
                 <button class="button" id="modify-button"> Modify Notifications </button>
+                <button class="button" id="delete-button"> Delete Notifications </button>
             </div>
 
             <!-- Notification Display -->

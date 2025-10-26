@@ -86,3 +86,15 @@ html, body{
 .notification-button:hover .notification-tooltip {
     display: block;
 }
+
+/* Error Styles */
+.error-text {
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+    color: red;
+}
+
+.red-border {
+    border-color: red;
+}

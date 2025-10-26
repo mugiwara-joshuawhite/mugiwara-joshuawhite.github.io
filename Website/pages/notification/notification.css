@@ -66,6 +66,25 @@
     text-align: left;
 }
 
+/* Modification buttons */
+
+.modify-button {
+    border: none;
+    background: none;
+
+    color: #cfb87c;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.modify-button:hover {
+    cursor: grab;
+}
+
+.modify-button:active {
+    opacity: 0.6;
+}
+
 /* User interaction elements */
 .create-box {
     width: 75%;
@@ -73,7 +92,6 @@
 }
 
 .input-box {
-    
     display: flex;
 }
 
