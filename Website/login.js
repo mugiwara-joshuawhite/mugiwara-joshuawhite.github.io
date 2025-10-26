@@ -37,18 +37,19 @@ function decrypt(encryptedData, key)
  */
 function tryLoadAccount(text)
 {
+    let tempAccount = new Account()
     // try to load the data in JSON format
     try
     {
         const dataJSON = JSON.parse(text)
-        account.load(dataJSON);
+        tempAccount.load(dataJSON);
     }
     catch (e) // if can't load, then set account to undefined
     {
-        account = null;
+        tempAccount = null;
     } 
     
-    return account;
+    return tempAccount;
 }
 
 /**

@@ -23,6 +23,18 @@ html, body{
     display: none;
 }
 
+/* Error Styles */
+.error-text {
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+    color: red;
+}
+
+.red-border {
+    border-color: red;
+}
+
 /* ##### NAVIGATION BAR ##### */
 
 .nav-bar {
@@ -87,14 +99,3 @@ html, body{
     display: block;
 }
 
-/* Error Styles */
-.error-text {
-    padding: 0;
-    margin: 0;
-    font-weight: bold;
-    color: red;
-}
-
-.red-border {
-    border-color: red;
-}

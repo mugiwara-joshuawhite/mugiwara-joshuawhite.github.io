@@ -37,12 +37,14 @@
 
 /* Notification List */
 .notification-list {
+    max-width: 100%;
     margin: 0;
     padding: 0;
 
     overflow-y: scroll;
 
     list-style: none;
+    word-wrap: break-word;
 }
 
 .categories {
@@ -52,17 +54,20 @@
 }
 
 .notification-text {
+    display: block;
+    width: 75%;
+
     padding: 10px;
     margin: 0;
-    flex: 3;
     text-align: left;
+    
 }
 
 .date-text {
     padding: 10px;
     margin: 0;
 
-    flex: 1;
+    width: 25%;
     text-align: left;
 }
 

@@ -32,3 +32,7 @@
     border-color: #cfb87c;
     background-color: black;
 }
+
+.red-border {
+    border-color: red;
+}
