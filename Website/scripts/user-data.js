@@ -111,19 +111,7 @@ class UserNotification
         this.isRead = false;
     }
 
-    /**
-     * Compare function to compare dates of a user notification
-     * @param {UserNotification} notification1 
-     * @param {UserNotification} notification2 
-     * @returns 
-     */
-    compareDates(notification1, notification2){
-        const dateObject1 = new Date(notification1.date);
-        const dateObject2 = new Date(notification2.date);
-
-        let result = dateObject2.valueOf() - dateObject1.valueOf();
-        return result;
-    }
+    
 }
 
 
