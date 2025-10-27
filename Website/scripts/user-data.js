@@ -102,7 +102,7 @@ class UserNotification
     /**
      * 
      * @param {string} text - notification text
-     * @param {string} date - notification date
+     * @param {Date} date - notification date
      */
     constructor(text, date) 
     {
