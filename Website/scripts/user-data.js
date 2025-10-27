@@ -18,12 +18,16 @@ class Account
      * to load user data
      * @param {string} name username of account
      * @param {string} password password of account
+     * @param {Array} income - Transactions of income
+     * @param {Array} expenses - Transactions of expenses
      */
     constructor(name, password)
     {
         this.name = name;
         this.password = password;
         this.notifications = [];
+        this.income = [];
+        this.expenses = [];
     }
 
     /**
@@ -44,7 +48,19 @@ class Account
             if (userData.notifications)
                 this.notifications = userData.notifications;
             else
-                this.notifications = []; 
+                this.notifications = [];
+
+            // Ditto above for income
+            if (userData.income)
+                this.income = userData.income;
+            else
+                this.income = [];
+
+            // Ditto above for expenses
+            if (userData.expenses)
+                this.expenses = userData.expenses;
+            else
+                this.expenses = [];
         }
     }
 
@@ -114,6 +130,26 @@ class UserNotification
     
 }
 
-
+/**
+ * Transaction class
+ * Represents either income or expenses
+ */
+class Transaction
+{
+    /**
+     * 
+     * @param {string} text - Name of the transaction
+     * @param {string} type - Type of transaction (i.e. bills, loan, salary, etc.)
+     * @param {number} amount - How much money was involved in the transaction
+     * @param {*} recurrance - How and when the transaction reoccurs, if at all
+     */
+    constructor(text, type, amount, recurrance)
+    {
+        this.text = text;
+        this.type = type;
+        this.amount = amount;
+        this.recurrance = recurrance;
+    }
+}
 
 let account = new Account();
