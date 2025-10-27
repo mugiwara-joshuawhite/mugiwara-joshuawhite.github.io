@@ -42,7 +42,14 @@ class Account
 
             // Make array if notifications aren't defined yet
             if (userData.notifications)
-                this.notifications = userData.notifications;
+                for (let i = 0; i < userData.notifications.length; i++)
+                {
+                    const notification = userData.notifications[i];
+                    const date = new Date(notification.date);
+                    const text = notification.text;
+                    this.notifications[i] = new UserNotification(text, date);
+                }
+                
             else
                 this.notifications = []; 
         }
