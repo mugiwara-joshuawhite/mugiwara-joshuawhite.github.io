@@ -27,9 +27,53 @@
         </div>
         <!-- TODO: Find a way to not have to duplicate this each page -->
 
-        INCOME PAGE
+        <!-- Transaction creation interaction -->
+        <dialog open class="create-box hidden">
+            <label for="transaction-text" style="font-weight: bold;">Transaction Text</label>
+            <textarea class="text-input" id="transaction-text"></textarea>
+
+            <div class="notification-detail-box">
+                <label for="notification-date" style="font-weight: bold;">Date</label>
+                <input type="date" class="date-input" id="notification-date">
+            </div>
+
+            <button class="button" id="add-notification"> Add </button>
+            <button class="button" id="modify-notification"> Modify </button>
+            <button class="button" id="cancel-notification"> Cancel </button>
+
+            <p class="error-text hidden"> Error Text </p>
+        </dialog>
+
+        <!-- NOT COPY PASTED INCOME PAGE -->
+        <div class="notification-page">
+            <div class="notification-tabs">
+                <button class="button" id="add-button"> Add Transaction</button>
+                <button class="button" id="modify-button"> Modify Transaction </button>
+                <button class="button" id="delete-button"> Delete Transaction </button>
+            </div>
+
+            <!-- Income Display -->
+            <div class="notification-details">
+                <p class="notification-title"> Income (totally not copy pasted notifications i swear) </p>
+
+                <div class="bar"> </div>
+                <div class="categories">
+                    <p class="transaction-text"> <strong> Transaction </strong> </p>
+                    <p class="type-text"> <strong> Type </strong> </p>
+                    <p class="amount-text"> <strong> Amount </strong> </p>
+                    <p class="reoccurance-text"> <strong> Recurring </strong> </p> <!-- This one sticks down slightly and I have no idea why -->
+                </div>
+                <div class="bar"> </div>
+
+                <ol class="notification-list">
+                </ol>
+
+            </div>
+            
+        </div>
 
 
         <script src="../../scripts/user-data.js"></script>
+        <script src="income.js"></script>
     </body>
 </html>
