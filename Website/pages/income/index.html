@@ -29,12 +29,57 @@
 
         <!-- Transaction creation interaction -->
         <dialog open class="create-box hidden">
-            <label for="transaction-text" style="font-weight: bold;">Transaction Text</label>
-            <textarea class="text-input" id="transaction-text"></textarea>
+            <label for="transaction-text" style="font-weight: bold;">Transaction Name</label>
+            <input type="text" class="small-text-input" id="transaction-text" placeholder="Groceries"></input><br>
+
+            <label for="transaction-text" style="font-weight: bold;">Transaction Category</label>
+            <select for="transaction-text" class="small-text-input" id="transaction-category">
+                <option value="Salary">Salary</option>
+                <option value="Big Salary">Big Salary</option>
+                <option value="Biggest Salary">Biggest Salary</option>
+            </select><br>
+
+            <label for="transaction-text" style="font-weight: bold;">Transaction Amount</label>
+            <input type="number" class="small-text-input" id="transaction-amount" placeholder="100" min="0"></input>
 
             <div class="notification-detail-box">
                 <label for="notification-date" style="font-weight: bold;">Date</label>
                 <input type="date" class="date-input" id="notification-date">
+            </div>
+
+            <label for="transaction-text" style="font-weight: bold;">Reccuring?</label>
+            <input type="checkbox" class="small-text-input" id="transaction-reccuring"></input><br>
+
+            <div id="is-recurring" hidden>
+                <label for="reccuring-text" style="font-weight: bold;">Reoccurs every: </label>
+                <select for="transaction-text" class="small-text-input" id="reccuring-interval">
+                    <option value="daily">Every X Days</option>
+                    <option value="monthly">Every X Months</option>
+                    <option value="yearly">Every X Years</option>
+                    <option value="specificDay">The Xth Day of Every Yth Month</option>
+                    <option value="specificDayOfWeek">The Xth Day of the Week of Every Yth Month</option>
+                </select><br>
+
+                <label for="x-text" style="font-weight: bold;">X </label>
+                <input type="number" class="small-text-input" id="x-text" placeholder="30" min="0"></input><br>
+
+                <div id = "is-weekday" hidden>
+                    <label for="weekday-dropdown" style="font-weight: bold;">Day of the Week </label>
+                    <select for="transaction-text" class="small-text-input" id="weekday-dropdown" placeholder="30" min="0">
+                        <option value="Monday">Monday</option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Friday">Friday</option>
+                        <option value="Saturday">Saturday</option>
+                        <option value="Sunday">Sunday</option>
+                    </select><br>
+                </div>
+
+                <div id="has-y" hidden>
+                    <label for="y-text" style="font-weight: bold;">Y </label>
+                    <input type="number" class="small-text-input" id="y-text" placeholder="30" min="0"></input><br>
+                </div>
             </div>
 
             <button class="button" id="add-notification"> Add </button>
@@ -47,7 +92,7 @@
         <!-- NOT COPY PASTED INCOME PAGE -->
         <div class="notification-page">
             <div class="notification-tabs">
-                <button class="button" id="add-button"> Add Transaction</button>
+                <button class="button" id="add-button"> Add Transaction </button>
                 <button class="button" id="modify-button"> Modify Transaction </button>
                 <button class="button" id="delete-button"> Delete Transaction </button>
             </div>

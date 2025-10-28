@@ -141,13 +141,15 @@ class Transaction
      * @param {string} text - Name of the transaction
      * @param {string} type - Type of transaction (i.e. bills, loan, salary, etc.)
      * @param {number} amount - How much money was involved in the transaction
+     * @param {Date} date - When the transaction first happened
      * @param {*} recurrance - How and when the transaction reoccurs, if at all
      */
-    constructor(text, type, amount, recurrance)
+    constructor(text, type, amount, date, recurrance)
     {
         this.text = text;
         this.type = type;
         this.amount = amount;
+        this.date = date
         this.recurrance = recurrance;
     }
 }

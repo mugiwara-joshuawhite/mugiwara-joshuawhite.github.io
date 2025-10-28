@@ -154,3 +154,14 @@
     justify-self: center;
     width: 50%;
 }
+
+.small-text-input {
+    justify-self: center;
+    text-align: left;
+
+    color-scheme: dark;
+    background-color: black;
+    border-color: #454849;
+    width: 20%;
+    margin-bottom: 10px;
+}
