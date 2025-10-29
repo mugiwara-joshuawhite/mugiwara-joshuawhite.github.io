@@ -30,42 +30,47 @@
         <!-- Transaction creation interaction -->
         <dialog open class="create-box hidden">
             <label for="transaction-text" style="font-weight: bold;">Transaction Name</label>
-            <input type="text" class="small-text-input" id="transaction-text" placeholder="Groceries"></input><br>
+            <input type="text" class="small-text-input" id="transaction-text" placeholder="Salary"></input><br>
 
-            <label for="transaction-text" style="font-weight: bold;">Transaction Category</label>
-            <select for="transaction-text" class="small-text-input" id="transaction-category">
+            <label for="transaction-category" style="font-weight: bold;">Transaction Category</label>
+            <select for="transaction-category" class="small-text-input" id="transaction-category">
                 <option value="Salary">Salary</option>
                 <option value="Big Salary">Big Salary</option>
                 <option value="Biggest Salary">Biggest Salary</option>
             </select><br>
 
-            <label for="transaction-text" style="font-weight: bold;">Transaction Amount</label>
+            <label for="transaction-amount" style="font-weight: bold;">Transaction Amount</label>
             <input type="number" class="small-text-input" id="transaction-amount" placeholder="100" min="0"></input>
 
             <div class="notification-detail-box">
                 <label for="notification-date" style="font-weight: bold;">Date</label>
                 <input type="date" class="date-input" id="notification-date">
-            </div>
+            </div><br>
 
-            <label for="transaction-text" style="font-weight: bold;">Reccuring?</label>
-            <input type="checkbox" class="small-text-input" id="transaction-reccuring"></input><br>
+            <label for="transaction-recurring" style="font-weight: bold;">Reccuring?</label>
+            <input type="checkbox" class="recurring-check" for="transaction-reccuring" id="transaction-reccuring" onclick="showRecurring()"></input><br>
 
-            <div id="is-recurring" hidden>
-                <label for="reccuring-text" style="font-weight: bold;">Reoccurs every: </label>
-                <select for="transaction-text" class="small-text-input" id="reccuring-interval">
+            <div class="is-recurring hidden">
+                <label for="reccuring-interval" style="font-weight: bold;">Reoccurs every: </label>
+                <select for="recurring-interval" class="recurring-select" id="reccuring-interval" onchange="showRecurring()">
                     <option value="daily">Every X Days</option>
                     <option value="monthly">Every X Months</option>
                     <option value="yearly">Every X Years</option>
                     <option value="specificDay">The Xth Day of Every Yth Month</option>
                     <option value="specificDayOfWeek">The Xth Day of the Week of Every Yth Month</option>
                 </select><br>
+                
+                <div class="notification-detail-box">
+                    <label for="end-date" style="font-weight: bold;">End Date</label>
+                    <input type="date" class="date-input" id="end-date">
+                </div>
 
                 <label for="x-text" style="font-weight: bold;">X </label>
-                <input type="number" class="small-text-input" id="x-text" placeholder="30" min="0"></input><br>
+                <input for="x-text" type="number" class="small-text-input" id="x-text" placeholder="30" min="0"></input><br>
 
-                <div id = "is-weekday" hidden>
+                <div class="is-weekday hidden">
                     <label for="weekday-dropdown" style="font-weight: bold;">Day of the Week </label>
-                    <select for="transaction-text" class="small-text-input" id="weekday-dropdown" placeholder="30" min="0">
+                    <select for="weekday-dropdown" class="small-text-input" id="weekday-dropdown" placeholder="30" min="0">
                         <option value="Monday">Monday</option>
                         <option value="Tuesday">Tuesday</option>
                         <option value="Wednesday">Wednesday</option>
@@ -76,9 +81,9 @@
                     </select><br>
                 </div>
 
-                <div id="has-y" hidden>
+                <div class="has-y hidden">
                     <label for="y-text" style="font-weight: bold;">Y </label>
-                    <input type="number" class="small-text-input" id="y-text" placeholder="30" min="0"></input><br>
+                    <input for="y-text" type="number" class="small-text-input" id="y-text" placeholder="30" min="0"></input><br>
                 </div>
             </div>
 

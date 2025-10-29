@@ -142,15 +142,21 @@ class Transaction
      * @param {string} type - Type of transaction (i.e. bills, loan, salary, etc.)
      * @param {number} amount - How much money was involved in the transaction
      * @param {Date} date - When the transaction first happened
-     * @param {*} recurrance - How and when the transaction reoccurs, if at all
+     * @param {Array} recurrance - How and when the transaction reoccurs, if at all. Empty if not.
+     * - First element is a string with type of recurrance (i.e. "daily")
+     * - First element is X value of recurrance (i.e. every 30 days, X = 30)
+     * - Second element is Y value of recurrance (i.e. 2nd day of every 3rd month, Y = 30)
+     * - Third element is weekday of recurrance (i.e. every tuesday, "Tuesday")
+     * @param {Date} endDate - If reocurring, when the payment stops reocurring
      */
-    constructor(text, type, amount, date, recurrance)
+    constructor(text, type, amount, date, recurrance, endDate)
     {
         this.text = text;
         this.type = type;
         this.amount = amount;
         this.date = date
         this.recurrance = recurrance;
+        this.endDate = endDate;
     }
 }
 
