@@ -144,9 +144,9 @@ class Transaction
      * @param {Date} date - When the transaction first happened
      * @param {Array} recurrance - How and when the transaction reoccurs, if at all. Empty if not.
      * - First element is a string with type of recurrance (i.e. "daily")
-     * - First element is X value of recurrance (i.e. every 30 days, X = 30)
-     * - Second element is Y value of recurrance (i.e. 2nd day of every 3rd month, Y = 30)
-     * - Third element is weekday of recurrance (i.e. every tuesday, "Tuesday")
+     * - Second element is X value of recurrance (i.e. every 30 days, X = 30)
+     * - Third element is Y value of recurrance (i.e. 2nd day of every 3rd month, Y = 30)
+     * - Fourth element is weekday of recurrance (i.e. every tuesday, "Tuesday")
      * @param {Date} endDate - If reocurring, when the payment stops reocurring
      */
     constructor(text, type, amount, date, recurrance, endDate)

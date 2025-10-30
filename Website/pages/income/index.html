@@ -48,11 +48,11 @@
             </div><br>
 
             <label for="transaction-recurring" style="font-weight: bold;">Reccuring?</label>
-            <input type="checkbox" class="recurring-check" for="transaction-reccuring" id="transaction-reccuring" onclick="showRecurring()"></input><br>
+            <input type="checkbox" class="recurring-check" for="transaction-reccuring" id="transaction-recurring" onclick="showRecurring()"></input><br>
 
             <div class="is-recurring hidden">
-                <label for="reccuring-interval" style="font-weight: bold;">Reoccurs every: </label>
-                <select for="recurring-interval" class="recurring-select" id="reccuring-interval" onchange="showRecurring()">
+                <label for="recurring-interval" style="font-weight: bold;">Reoccurs every: </label>
+                <select for="recurring-interval" class="recurring-select" id="recurring-interval" onchange="showRecurring()">
                     <option value="daily">Every X Days</option>
                     <option value="monthly">Every X Months</option>
                     <option value="yearly">Every X Years</option>
@@ -90,6 +90,17 @@
             <button class="button" id="add-notification"> Add </button>
             <button class="button" id="modify-notification"> Modify </button>
             <button class="button" id="cancel-notification"> Cancel </button>
+
+            <p class="error-text hidden"> Error Text </p>
+        </dialog>
+
+        <!-- Confirm Deletion Dialog -->
+        <dialog open class="delete-box hidden">
+            <p class="delete-button" style="font-weight: bold;" id="delete-warning">Are you sure you want to delete this transaction?</p>
+            <p class="delete-button" style="font-weight: bold;" id="delete-warning">This action cannot be undone.</p>            
+
+            <button class="evil-button" id="confirm-delete"> Yes </button>
+            <button class="button" id="cancel-delete"> No </button>
 
             <p class="error-text hidden"> Error Text </p>
         </dialog>

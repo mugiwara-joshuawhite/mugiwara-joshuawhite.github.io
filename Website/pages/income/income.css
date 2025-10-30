@@ -106,8 +106,32 @@
     opacity: 0.6;
 }
 
+/* Delete buttons */
+
+.delete-button {
+    border: none;
+    background: none;
+
+    color: red;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.delete-button:hover {
+    cursor: grab;
+}
+
+.delete-button:active {
+    opacity: 0.6;
+}
+
 /* User interaction elements */
 .create-box {
+    width: 75%;
+    background-color: #212121;
+}
+
+.delete-box {
     width: 75%;
     background-color: #212121;
 }
@@ -118,6 +142,17 @@
 
 .button {
     background-color: black;
+    border-width: 4px;
+
+    font-size: larger;
+    font-weight: bold;
+    text-align: center;
+}
+
+.evil-button {
+    background-color: black;
+    color: red;
+    border-color: red;
     border-width: 4px;
 
     font-size: larger;

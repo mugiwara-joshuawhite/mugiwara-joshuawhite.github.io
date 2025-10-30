@@ -18,6 +18,7 @@ function loadIncome()
         let transaction = document.createElement('li');
         let divider = document.createElement('div');
         let modifyButton = document.createElement('button');
+        let deleteButton = document.createElement('button');
 
         modifyButton.innerHTML = 'Modify Transaction';
         modifyButton.classList.add('modify-button');
@@ -26,6 +27,16 @@ function loadIncome()
         // Bind modify button to modify notification at index
         modifyButton.addEventListener('click', function(){
             modifyIncome(i);
+        })
+
+        // Set up delete button
+        deleteButton.innerHTML = 'Delete Transaction';
+        deleteButton.classList.add('delete-button');
+        deleteButton.classList.add('hidden');
+
+        // Bind delete button to delete notification at index
+        deleteButton.addEventListener('click', function(){
+            deleteWarning(i);
         })
         
         transaction.classList.add('categories');
@@ -38,6 +49,7 @@ function loadIncome()
         }
 
         // Add notication text and date to display
+        // dude what even is this formatting
         transaction.innerHTML = `
         <p class="transaction-text"> ${incomeArray[i].text}
         <p class="type-text"> ${incomeArray[i].type}
@@ -51,6 +63,7 @@ function loadIncome()
             + transaction.innerHTML;
         notificationList.appendChild(transaction);
         notificationList.appendChild(modifyButton);
+        notificationList.appendChild(deleteButton);
         notificationList.appendChild(divider);
     }
 }
@@ -63,8 +76,8 @@ function openAddIncome()
     // Obtian all buttons
     const createBox = document.querySelector(".create-box");
     const errorText = document.querySelector('.error-text');
-    const notificationTextInput = document.querySelector('#transaction-text');
-    const notificationDateInput = document.querySelector('#notification-date');
+    const transactionTextInput = document.querySelector('#transaction-text');
+    const transactionDateInput = document.querySelector('#notification-date');
 
     const addNotificationButton = document.querySelector('#add-notification');
     const modifyNotificationButton = document.querySelector('#modify-notification');
@@ -74,8 +87,8 @@ function openAddIncome()
     modifyNotificationButton.classList.add('hidden');
 
     // clear input fields on open
-    notificationTextInput.value = "";
-    notificationDateInput.value = "";
+    // transactionTextInput.value = "";
+    // transactionDateInput.value = "";
 
     // Hide error text, and reveal createbox when it's ready
     errorText.classList.add('hidden'); 
@@ -139,47 +152,100 @@ function closeAddIncome()
 function addIncome(index)
 {
     // Get input fields
-    const notificationTextInput = document.querySelector('#transaction-text');
-    const notificationDateInput = document.querySelector('#notification-date');
+    const transactionTextInput = document.querySelector('#transaction-text');
+    const transactionCategoryInput = document.querySelector('#transaction-category');
+    const transactionAmountInput = document.querySelector('#transaction-amount');
+    const transactionDateInput = document.querySelector('#notification-date');
+    const recurringInput = document.querySelector('#transaction-recurring');
+    const recurringIntervalInput = document.querySelector('#recurring-interval');
+    const endDateInput = document.querySelector('#end-date');
+    const xInput = document.querySelector('#x-text');
+    const weekdayDropdown = document.querySelector('#weekday-dropdown');
+    const yInput = document.querySelector('#y-text');
 
     // Get error field
     const errorText = document.querySelector('.error-text');
     errorText.classList.add('hidden'); // make sure it's hidden
+    xError = false;
+    yError = false;
 
-    // Get input data
-    const notificationText = notificationTextInput.value;
-    const notificationDate = notificationDateInput.value;
-
-    // Invalid 
-    if (notificationText.length <= 0 || notificationDate.length <= 0)
+    // The Mother of All Error Checkers
+    if (recurringInput.checked)
     {
-        errorText.innerHTML = `Transaction needs all fields filled out`
+        xError = (xInput.value.length <= 0 || endDateInput.value.length <= 0);
+        if (recurringIntervalInput.value == "specificDay" || recurringIntervalInput.value == "specificDayOfWeek")
+        {
+            yError = (yInput.value.length <= 0);
+        }
+    }
+
+    if (transactionTextInput.value.length <= 0 ||
+        transactionAmountInput.value.length <= 0 ||
+        transactionDateInput.value.length <= 0 ||
+        xError ||
+        yError)
+    {
+        errorText.innerHTML = `All transaction fields must be filled out`
         errorText.classList.remove('hidden');
     }
-    else // Valid notification
+    else // Valid transaction
     {
-        // Replace dashes in notificationDate with
-        let date = new Date(notificationDate.replace('-', '/'));
-        let notification = new UserNotification(notificationText, date);
+        // Replace dashes in transactionDate with
+        let date = new Date(transactionDateInput.value.replace('-', '/'));
+        let endDate = new Date(endDateInput.value.replace('-', '/'));
+        
+        // Create recurrance array
+        let recurrance = [];
+        if (recurringInput.checked)
+        {
+            recurrance.push(recurringIntervalInput.value);
+            recurrance.push(xInput.value);
+            if (recurringIntervalInput.value == "specificDay" || recurringIntervalInput.value == "specificDayOfWeek")
+            {
+                recurrance.push(yInput.value);
+            }
+            if (recurringIntervalInput.value == "specificDayOfWeek")
+            {
+                recurrance.push(weekdayDropdown.value);
+            }
+        }
 
-        // If index is a number (not undefined) then replace notificatio
+        // Create transaction
+        let transaction = new Transaction(
+            transactionTextInput.value, 
+            transactionCategoryInput.value,
+            transactionAmountInput.value,
+            date,
+            recurrance,
+            endDate
+        );
+
+        // If index is a number (not undefined) then replace transaction
         if (Number.isInteger(index))
-            account.notifications[index] = notification;
-        else // else add created notification to end of list
-            account.notifications.push(notification);
+            account.income[index] = transaction;
+        else // else add created transaction to end of list
+            account.income.push(transaction);
 
-        account.notifications.sort(compareDates);
+        account.income.sort(compareIncomes);
         account.saveToStorage(); // save changes to storage
 
         // Reflect changes in notification display
-        loadNotifications();
-        closeAddNotification();
+        loadIncome();
+        closeAddIncome();
     }
 }
 
-function compareIncomes()
+/**
+ * Sorting function for two transactions.
+ * Use with .sort()
+ */
+function compareIncomes(transaction1, transaction2)
 {
+    const dateObject1 = new Date(transaction1.date);
+    const dateObject2 = new Date(transaction2.date);
 
+    let result = dateObject2.valueOf() - dateObject1.valueOf();
+    return result;
 }
 
 /**
@@ -216,14 +282,69 @@ function modifyIncomes()
     }
 }
 
-function deleteIncome()
+/**
+ * Warns the user before deleting data at the specified index.
+ */
+function deleteWarning(index)
 {
+    const deleteDialog = document.querySelector('.delete-box');
+    const deleteText = document.querySelectorAll('#delete-warning');
+    const confirmDelete = document.querySelector('#confirm-delete');
+    const cancelDelete = document.querySelector('#cancel-delete');
 
+    for(let i = 0; i < deleteText.length; i++)
+    {
+        deleteText[i].classList.remove('hidden');
+    }
+
+    deleteDialog.classList.remove('hidden');
+    confirmDelete.addEventListener('click', function (){ deleteIncome(index) });
+    cancelDelete.addEventListener('click', function (){ cancelWarning(index) })
 }
 
+/**
+ * Removes the warning window for deleting a transaction.
+ */
+function cancelWarning(index)
+{
+    const deleteDialog = document.querySelector('.delete-box');
+    const deleteText = document.querySelectorAll('#delete-warning');
+    const confirmDelete = document.querySelector('#confirm-delete');
+    const cancelDelete = document.querySelector('#cancel-delete');
+
+    for(let i = 0; i < deleteText.length; i++)
+    {
+        deleteText[i].classList.add('hidden');
+    }
+
+    deleteDialog.classList.add('hidden');
+    confirmDelete.removeEventListener('click', function (){ deleteIncome(index) });
+    cancelDelete.removeEventListener('click', function (){ cancelWarning(index) })
+}
+
+/**
+ * Delete an income at the given index
+ */
+function deleteIncome(index)
+{
+    console.log(account.income.splice(index, 1));
+    account.saveToStorage();
+    cancelWarning(index); // Make warning dialog disappear
+    loadIncome();
+    deleteIncomes(); // Keep the delete options open
+}
+
+/**
+ * Open or close delete income buttons on the income list
+ */
 function deleteIncomes()
 {
-    
+    const deleteButtons = document.querySelectorAll(".delete-button");
+
+    for(let i = 0; i < deleteButtons.length; i++)
+    {
+        deleteButtons[i].classList.toggle('hidden');
+    }
 }
 
 /**
@@ -236,11 +357,11 @@ async function main()
 
     const addButton = document.querySelector('#add-button');
     const modifyButton = document.querySelector('#modify-button');
+    const deleteButton = document.querySelector('#delete-button');
 
     // Notification creation buttons
     const addNotificationButton = document.querySelector('#add-notification');
     const cancelNotificationButton = document.querySelector('#cancel-notification');
-    const recurringCheckbox = document.querySelector("transaction-recurring");
 
     // Add notification to account on addButton press
     addButton.addEventListener('click', openAddIncome);
@@ -248,11 +369,12 @@ async function main()
     // Modify notifications of account on button press
     modifyButton.addEventListener('click', modifyIncomes);
 
+    // Delete notifications prompts
+    deleteButton.addEventListener('click', deleteIncomes)
 
     addNotificationButton.addEventListener('click', function () { addIncome(); });
     cancelNotificationButton.addEventListener('click', closeAddIncome);
 
-    account.income.push(new Transaction(text="Hiiii", type="Salary", amount="100", date=new Date("2020-01-01"), recurrance=["monthly", 1], endDate=new Date("2021-01-01")));
     loadIncome(account);
 }
 
