@@ -224,7 +224,7 @@ async function main()
     completeButton.addEventListener('click',completeTask)
 
 
-    addNotificationButton.addEventListener('click', function () { addNotification(); });
+    addNotificationButton.addEventListener('click', addNotification);
     cancelNotificationButton.addEventListener('click', closeAddNotification);
 
 
