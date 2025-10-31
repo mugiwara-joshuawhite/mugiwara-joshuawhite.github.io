@@ -27,10 +27,114 @@
         </div>
         <!-- TODO: Find a way to not have to duplicate this each page -->
 
-        <!-- EXPENSE PAGE -->
-        EXPENSE PAGE
+        <!-- Transaction creation interaction -->
+        <dialog open class="create-box hidden">
+            <label for="transaction-text" style="font-weight: bold;">Transaction Name</label>
+            <input type="text" class="small-text-input" id="transaction-text" placeholder="Salary"></input><br>
+
+            <label for="transaction-category" style="font-weight: bold;">Transaction Category</label>
+            <select for="transaction-category" class="small-text-input" id="transaction-category">
+                <option value="Bills">Bills</option>
+                <option value="Big Bills">Big Bills</option>
+                <option value="Biggest Bills">Biggest Bills</option>
+            </select><br>
+
+            <label for="transaction-amount" style="font-weight: bold;">Transaction Amount</label>
+            <input type="number" class="small-text-input" id="transaction-amount" placeholder="100" min="0"></input>
+
+            <div class="notification-detail-box">
+                <label for="notification-date" style="font-weight: bold;">Date</label>
+                <input type="date" class="date-input" id="notification-date">
+            </div><br>
+
+            <label for="transaction-recurring" style="font-weight: bold;">Reccuring?</label>
+            <input type="checkbox" class="recurring-check" for="transaction-reccuring" id="transaction-recurring" onclick="showRecurring()"></input><br>
+
+            <div class="is-recurring hidden">
+                <label for="recurring-interval" style="font-weight: bold;">Reoccurs every: </label>
+                <select for="recurring-interval" class="recurring-select" id="recurring-interval" onchange="showRecurring()">
+                    <option value="daily">Every X Days</option>
+                    <option value="monthly">Every X Months</option>
+                    <option value="yearly">Every X Years</option>
+                    <option value="specificDay">The Xth Day of Every Yth Month</option>
+                    <option value="specificDayOfWeek">The Xth Day of the Week of Every Yth Month</option>
+                </select><br>
+                
+                <div class="notification-detail-box">
+                    <label for="end-date" style="font-weight: bold;">End Date</label>
+                    <input type="date" class="date-input" id="end-date">
+                </div>
+
+                <label for="x-text" style="font-weight: bold;">X </label>
+                <input for="x-text" type="number" class="small-text-input" id="x-text" placeholder="30" min="0"></input><br>
+
+                <div class="is-weekday hidden">
+                    <label for="weekday-dropdown" style="font-weight: bold;">Day of the Week </label>
+                    <select for="weekday-dropdown" class="small-text-input" id="weekday-dropdown" placeholder="30" min="0">
+                        <option value="Monday">Monday</option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Friday">Friday</option>
+                        <option value="Saturday">Saturday</option>
+                        <option value="Sunday">Sunday</option>
+                    </select><br>
+                </div>
+
+                <div class="has-y hidden">
+                    <label for="y-text" style="font-weight: bold;">Y </label>
+                    <input for="y-text" type="number" class="small-text-input" id="y-text" placeholder="30" min="0"></input><br>
+                </div>
+            </div>
+
+            <button class="button" id="add-notification"> Add </button>
+            <button class="button" id="modify-notification"> Modify </button>
+            <button class="button" id="cancel-notification"> Cancel </button>
+
+            <p class="error-text hidden"> Error Text </p>
+        </dialog>
+
+        <!-- Confirm Deletion Dialog -->
+        <dialog open class="delete-box hidden">
+            <p class="delete-button" style="font-weight: bold;" id="delete-warning">Are you sure you want to delete this transaction?</p>
+            <p class="delete-button" style="font-weight: bold;" id="delete-warning">This action cannot be undone.</p>            
+
+            <button class="evil-button" id="confirm-delete"> Yes </button>
+            <button class="button" id="cancel-delete"> No </button>
+
+            <p class="error-text hidden"> Error Text </p>
+        </dialog>
+
+        <!-- NOT COPY PASTED INCOME PAGE -->
+        <div class="notification-page">
+            <div class="notification-tabs">
+                <button class="button" id="add-button"> Add Transaction </button>
+                <button class="button" id="modify-button"> Modify Transaction </button>
+                <button class="button" id="delete-button"> Delete Transaction </button>
+            </div>
+
+            <!-- Income Display -->
+            <div class="notification-details">
+                <p class="notification-title"> Expense (this is literally just negative income) </p>
+
+                <div class="bar"> </div>
+                <div class="categories">
+                    <p class="transaction-text"> <strong> Transaction </strong> </p>
+                    <p class="type-text"> <strong> Type </strong> </p>
+                    <p class="amount-text"> <strong> Amount </strong> </p>
+                    <p class="reoccurance-text"> <strong> Recurring </strong> </p> <!-- This one sticks down slightly and I have no idea why -->
+                </div>
+                <div class="bar"> </div>
+
+                <ol class="notification-list">
+                </ol>
+
+            </div>
+            
+        </div>
 
 
         <script src="../../scripts/user-data.js"></script>
+        <script src="expense.js"></script>
     </body>
 </html>
