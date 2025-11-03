@@ -64,6 +64,7 @@
     margin: 0;
     text-align: left;
     
+    white-space: pre-wrap;
 }
 
 .date-text {
