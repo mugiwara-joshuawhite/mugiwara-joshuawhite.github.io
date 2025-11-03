@@ -11,6 +11,7 @@
 }
 
 html, body{
+    height: 100%;
     background-color: #212121;
     
     margin: 0;
@@ -20,6 +21,18 @@ html, body{
 
 .hidden {
     display: none;
+}
+
+/* Error Styles */
+.error-text {
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+    color: red;
+}
+
+.red-border {
+    border-color: red;
 }
 
 /* ##### NAVIGATION BAR ##### */
@@ -75,13 +88,16 @@ html, body{
 
 .notification-tooltip {
     align-self: flex-start;
-    margin-top: 33px;
+    margin-top: 5px;
+    margin-left: -340px;
 
-    width: 19%;
-    position: fixed;
+    width: 600px;
+    height: 300px;
+    position: absolute;
     display: none;
 }
 
 .notification-button:hover .notification-tooltip {
     display: block;
 }
+

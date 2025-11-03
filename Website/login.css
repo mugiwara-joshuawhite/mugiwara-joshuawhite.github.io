@@ -33,13 +33,6 @@
     background-color: black;
 }
 
-.error-text {
-    padding: 0;
-    margin: 0;
-    font-weight: bold;
-    color: red;
-}
-
 .red-border {
     border-color: red;
 }

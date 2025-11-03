@@ -1,0 +1,35 @@
+#welcome{
+    display:inline-block;
+    width: 50%;
+    border: 5px solid rgba(243, 235, 95, 0.841);
+    font-size: 2em;
+}
+/*Have to explicitly put this otherwise it won't be hidden initially*/
+.dropdownbox.hidden{
+    display:none;
+}
+.dropdownbox{
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    background-color:black;
+    width: 200px;
+
+    border: 5px solid gray;
+    border-radius:10px;
+    border-width: 5px;
+}
+.selectionarea{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+.inputbox{
+    background-color:black;
+    width:100px;
+}
+.button{
+    background-color:black;
+}

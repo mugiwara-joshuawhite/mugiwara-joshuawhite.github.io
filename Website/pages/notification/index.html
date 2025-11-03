@@ -23,19 +23,40 @@
         </div>
         <!-- TODO: Find a way to not have to duplicate this each page -->
 
+        <!-- Notification creation interaction -->
+        <dialog open class="create-box hidden">
+            <label for="notification-text" style="font-weight: bold;">Notification Text</label>
+            <textarea class="text-input" id="notification-text"></textarea>
+
+            <div class="notification-detail-box">
+                <label for="notification-date" style="font-weight: bold;">Date</label>
+                <input type="date" class="date-input" id="notification-date">
+            </div>
+
+            <button class="button" id="add-notification"> Add </button>
+            <button class="button" id="modify-notification"> Modify </button>
+            <button class="button" id="cancel-notification"> Cancel </button>
+
+            <p class="error-text hidden"> Error Text </p>
+        </dialog>
 
         <!-- NOTIFICATION PAGE -->
         <div class="notification-page">
             <div class="notification-tabs">
+                <button class="button" id="add-button"> Add Notification</button>
+                <button class="button" id="modify-button"> Modify Notifications </button>
+                <button class="button" id="complete-button">  Complete Task </button>
+                <button class="button hidden error-text" id="confirm-complete-button">  Confirm Complete Tasks </button>
             </div>
 
+            <!-- Notification Display -->
             <div class="notification-details">
                 <p class="notification-title"> Notifications </p>
 
                 <div class="bar"> </div>
                 <div class="categories">
-                    <p class="notification-text"> <strong> Notification </strong> </p>
-                    <p class="date-text"> <strong> Date </strong> </p>
+                    <p class="notification-text"><strong>Notification</strong></p>
+                    <p class="date-text"><strong>Date</strong></p>
                 </div>
                 <div class="bar"> </div>
 
@@ -43,12 +64,12 @@
                 </ol>
 
             </div>
-
-
             
         </div>
 
+        
         <script src="../../scripts/user-data.js"></script>
+        <script src="notification-handler.js"></script>
         <script src="notification.js"></script>
     </body>
 </html>

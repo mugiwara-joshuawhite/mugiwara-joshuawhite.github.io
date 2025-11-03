@@ -5,79 +5,52 @@
  * @description this script handles login logic
  */
 
+/**
+ * Decrypt data given a key
+ * @param {String} encryptedData data to decrypt
+ * @param {String} key key given to decrypt data
+ * @returns {String} result decrypted data
+ */
+
+function decrypt(encryptedData, key)
+{
+    let result;
+    
+    try // try to decrypt the data
+    {
+        const decrypted = CryptoJS.AES.decrypt(encryptedData, key)
+        result = decrypted.toString(CryptoJS.enc.Utf8);
+    }
+    catch (e) // if data can't be decrypted set result to empty string
+    {
+        result = ""
+    }
+
+    // Return decrypted result
+    return result;
+}
 
 /**
- * login function triggered by login button.
- * if valid login take user to home page
+ * Try to load account from text, if text is invalid set account to
+ * undefined
+ * @param {String} text
+ * @returns {Account} account Account after attempting to load
  */
-async function login()
+function tryLoadAccount(text)
 {
-    let account = new Account();
-    const fileInput = document.querySelector('#user-file');
-    const errorText = document.querySelector('.error-text');
-
-    const usernameInput = document.querySelector('#username');
-    const passwordInput = document.querySelector('#password');
-    const username = usernameInput.value;
-    const password = passwordInput.value;
-
-    // Load user file from input if file is given
-    const file = fileInput.files[0]
-
-    // if valid file was given verify account details
-    if (validJSONFile(file))
+    let tempAccount = new Account()
+    // try to load the data in JSON format
+    try
     {
-        fileInput.classList.remove('red-border');
-
-        // Load file information
-        const fileText = await file.text();
-        const accountJSON = JSON.parse(fileText);
-        account.load(accountJSON);
-
-        // Validate user credentials
-        // if name or username is incorrect then give invalid login
-        if (account.name !== username || account.password !== password)
-        {
-            errorText.innerHTML = `Invalid Login, Please Try Again.`;
-            errorText.classList.remove(`hidden`);
-
-            usernameInput.classList.add('red-border');
-            passwordInput.classList.add('red-border');
-        }
-        else // Correct login, save account and move to hompage
-        {
-            await account.saveToStorage();
-            window.location.href = '/pages/home';
-        }
+        const dataJSON = JSON.parse(text)
+        tempAccount.load(dataJSON);
     }
-    else // else load from storage
+    catch (e) // if can't load, then set account to undefined
     {
-        await account.loadFromStorage();
-        
-        // Validate user credentials
-        // if name or username is incorrect then give invalid login
-        if (account.name !== username || account.password !== password)
-        {
-            errorText.innerHTML = `Invalid Login, Please Try Again.`;
-            
-            errorText.classList.remove(`hidden`);
-            usernameInput.classList.add('red-border');
-            passwordInput.classList.add('red-border');
-        }
-        else // Correct login, save account and move to hompage
-        {
-            await account.saveToStorage();
-            window.location.href = '/pages/home';
-        }
-    }
-    // else // Invalid input file, put red border to indicate invalid file
-    // {
-    //     usernameInput.classList.remove('red-border');
-    //     passwordInput.classList.remove('red-border');
-    //     errorText.classList.add(`hidden`);
-
-    //     fileInput.classList.add('red-border');
-    // }
+        tempAccount = null;
+    } 
+    
+    return tempAccount;
 }
 
 /**
@@ -102,6 +75,88 @@ function validJSONFile(file)
     return validFile;
 }
 
+/**
+ * login function triggered by login button.
+ * if valid login take user to home page
+ */
+async function login()
+{
+    const fileInput = document.querySelector('#user-file');
+    const errorText = document.querySelector('.error-text');
+
+    const usernameInput = document.querySelector('#username');
+    const passwordInput = document.querySelector('#password');
+    const username = usernameInput.value;
+    const password = passwordInput.value;
+
+    // Load user file from input if file is given
+    const file = fileInput.files[0];
+
+    // if valid file was given verify account details
+    if (validJSONFile(file))
+    {
+        fileInput.classList.remove('red-border');
+
+        // Load and decrypt file data
+        const fileText = await file.text();
+        const decryptedText = decrypt(fileText, username + password);
+
+        // Try and load data into account
+        account = tryLoadAccount(decryptedText);
+
+        // Validate user credentials
+        // if name or username is incorrect then give invalid login
+       if (account.name !== username || account.password !== password)
+        {
+            errorText.innerHTML = `Invalid Login, Please Try Again.`;
+            errorText.classList.remove(`hidden`);
+
+            usernameInput.classList.add('red-border');
+            passwordInput.classList.add('red-border');
+        }
+        else // Correct login, save account and move to hompage
+        {
+            await account.saveToStorage();
+            window.location.href = 'pages/home/index.html',true; //https://stackoverflow.com/questions/15759020/window-location-href-doesnt-redirect
+        }
+    }
+    else // else load from storage
+    {
+        await account.loadFromStorage();
+        
+        // Validate user credentials
+        // if name or username is incorrect then give invalid login
+        if (account.name !== username || account.password !== password)
+        {
+            errorText.innerHTML = `Invalid Login, Please Try Again.`;
+            
+            errorText.classList.remove(`hidden`);
+            usernameInput.classList.add('red-border');
+            passwordInput.classList.add('red-border');
+        }
+        else // Correct login, save account and move to hompage
+        {
+            await account.saveToStorage();
+            if (account.setup == false) {
+                window.location.href = 'pages/setup/index.html',true;
+            }
+            else {
+                 window.location.href = 'pages/home/index.html',true; //https://stackoverflow.com/questions/15759020/window-location-href-doesnt-redirect
+            }
+        }
+    }
+    // else // Invalid input file, put red border to indicate invalid file
+    // {
+    //     usernameInput.classList.remove('red-border');
+    //     passwordInput.classList.remove('red-border');
+    //     errorText.classList.add(`hidden`);
+
+    //     fileInput.classList.add('red-border');
+    // }
+}
+
+
+
 
 /**
  * TODO: input sanitization
@@ -121,21 +176,40 @@ async function createAccount()
     const password = passwordInput.value;
     const passwordConfirm = passwordConfirmInput.value;
 
-    // If no username is given don't create account
-    if (username.length == 0)
+    // Tests for input of username
+    if (username.length < 5 || username.length > 25)
     {
+
         errorText.classList.remove('hidden');
-        errorText.innerHTML = `Error: Invalid Username`;
+        
+        if (username.length == 0) {
+            errorText.innerHTML = 'Error: No UserName provided.';
+        }
+        else if (username.length < 5) {
+            errorText.innerHTML = 'Error: UserName too short, must be 5 or more characters.';
+        }
+        else if (username.length > 25) {
+            errorText.innerHTML = 'Error: UserName too long, must be 25 or fewer characters.';
+        }
 
         usernameInput.classList.add('red-border');
         passwordInput.classList.remove('red-border');
         passwordConfirmInput.classList.remove('red-border');
     }
-    // If no password is given don't create account
-    else if (password.length == 0)
-    {
+    // Tests for input of password
+    else if (password.length < 5 || password.length > 25)
+    {   
         errorText.classList.remove('hidden');
-        errorText.innerHTML = `Error: No Password`;
+
+         if (password.length == 0) {
+            errorText.innerHTML = 'Error: No PassWord provided.';
+        }
+        else if (password.length < 5) {
+            errorText.innerHTML = 'Error: PassWord too short, must be 5 or more characters.';
+        }
+        else if (password.length > 25) {
+            errorText.innerHTML = 'Error: PassWord too long, must be 25 or fewer characters.';
+        }
 
         usernameInput.classList.remove('red-border');
         passwordInput.classList.add('red-border');
@@ -153,11 +227,19 @@ async function createAccount()
     }
     else // create account of input username and password
     {
-        let account = new Account(username, password);
-
         // Wait for account to be saved before moving to home page
+        account.name = username;
+        account.password = password;
+
+        //Setup page if account not setup
+        //If for some odd reason setup is true, go to home page
         await account.saveToStorage();
-        window.location.href = '/pages/home';
+               if (account.setup == false) {
+            window.location.href = 'pages/setup/index.html',true;
+        }
+        else {
+            window.location.href = 'pages/home/index.html',true;
+        }
     }
 }
 
@@ -208,6 +290,7 @@ function hideErrors(elements)
         elements[i].classList.remove('red-border');
     }
 }
+
 
 
 /**
