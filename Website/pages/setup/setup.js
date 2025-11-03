@@ -150,15 +150,17 @@ function addDistribution() {
  * Ensures user has entered at least one of each piece of data and then
  * saves to storage and redirects to home page
  */
-function collect() {
+async function collect() {
 
     if (account.streams.length >= 1
         && account.expenses.length >= 1
         && account.distributions.length >= 1) 
     {
-        account.saveToStorage();
+        //Account is now setup
         account.setup = true;
-        window.location.href = "/Website/pages/home/index.html";
+
+        //Save account to storage
+        await account.saveToStorage();
     }
 }
 

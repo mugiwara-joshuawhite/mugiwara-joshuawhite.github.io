@@ -45,6 +45,12 @@ class Account
             this.name = userData.name;
             this.password = userData.password;
 
+            //Setup data
+            this.setup = userData.setup;
+            this.streams = userData.streams;
+            this.expenses = userData.expenses;
+            this.distributions = userData.distributions;
+
             // Make array if notifications aren't defined yet
             if (userData.notifications)
                 for (let i = 0; i < userData.notifications.length; i++)
