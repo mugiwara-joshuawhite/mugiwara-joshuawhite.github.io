@@ -6,57 +6,19 @@
  * adding, modification, and removal of notifications
  */
 
-/**
- * Load notifications from account
- */
-function loadNotifications()
-{
-    const notifications = account.notifications;
-    const notificationList = document.querySelector('.notification-list'); 
-    notificationList.innerHTML = ''; // clear current notifications displayed
-
-    // For all notifications in the list, load a notification in the display
-    for(let i = 0; i < notifications.length; i++)
-    {
-        let notification = document.createElement('li');
-        let divider = document.createElement('div');
-        let modifyButton = document.createElement('button');
-
-        modifyButton.innerHTML = 'Modify Notification';
-        modifyButton.classList.add('modify-button');
-        modifyButton.classList.add('hidden');
-
-        // Bind modify button to modify notification at index
-        modifyButton.addEventListener('click', function(){
-            modifyNotification(i);
-        })
-        
-        notification.classList.add('categories');
-        divider.classList.add('bar');
-
-        let date = new Date(notifications[i].date);
-
-        // Add notication text and date to display
-        notification.innerHTML = `
-        <p class="notification-text"> ${notifications[i].text}
-        <p class="date-text"> ${date.toDateString()}
-        `;
-
-        // Add Notification to the list.
-        notification.innerHTML = 
-            `<input type="checkbox" class="hidden checkbox" id="checkbox-${i}">`
-            + notification.innerHTML;
-        notificationList.appendChild(notification);
-        notificationList.appendChild(modifyButton);
-        notificationList.appendChild(divider);
-    }
-}
+let abortController = new AbortController(); // allows for control over event listeners being canceled
 
 /**
  * open window to add notifications
  */
 function openAddNotifications()
 {
+    // Abort any operation pre-existing involving the notification and reset the controller
+    // to prepare for any operation using the notification panel
+    abortController.abort()
+    abortController = new AbortController();
+
+
     // Obtian all buttons
     const createBox = document.querySelector(".create-box");
     const errorText = document.querySelector('.error-text');
@@ -85,7 +47,7 @@ function openAddNotifications()
 function closeAddNotification()
 {
     const createBox = document.querySelector(".create-box");
-
+    
     createBox.classList.add('hidden');
 }
 
@@ -166,9 +128,11 @@ function modifyNotification(index)
     // To modify notificiation we add notification to specified index
     modifyNotificationButton.addEventListener('click', function (){
         addNotification(index);
-    })
-
+    },
+    { signal:abortController.signal }) // bind it to the abort controller to cancel it if not used
 }
+
+
 
 /**
  * Modify notifications of user account
@@ -185,6 +149,43 @@ function modifyNotifications()
 }
 
 
+function showCompleteTasks()
+{
+    const allSelectionBox = document.querySelectorAll(".completeCheckBox");
+
+    const completeButton = document.querySelector('#complete-button');
+    const confirmCompleteButton = document.querySelector('#confirm-complete-button');
+    completeButton.classList.add('hidden')
+    confirmCompleteButton.classList.remove('hidden')
+
+    allSelectionBox.forEach((checkbox) => checkbox.classList.remove('hidden'));
+}
+
+function confirmCompleteTasks()
+{
+    const allSelectionBox = document.querySelectorAll(".completeCheckBox");
+
+    const completeButton = document.querySelector('#complete-button');
+    const confirmCompleteButton = document.querySelector('#confirm-complete-button');
+    completeButton.classList.remove('hidden')
+    confirmCompleteButton.classList.add('hidden')
+
+    // check and remove all checked notifications
+    for(let i = allSelectionBox.length - 1; i >= 0; i--)
+    {
+        if(allSelectionBox[i].checked)
+        {
+            account.notifications.splice(i,1);
+        }
+    }
+
+    account.saveToStorage();
+
+    // load notifications
+    loadNotifications();
+}
+
+
 /**
  * Main function, limits scope.
  */
@@ -194,23 +195,32 @@ async function main()
 
     const addButton = document.querySelector('#add-button');
     const modifyButton = document.querySelector('#modify-button');
+    const completeButton = document.querySelector('#complete-button');
+    const confirmCompleteButton = document.querySelector('#confirm-complete-button');
+
 
     // Notification creation buttons
     const addNotificationButton = document.querySelector('#add-notification');
     const cancelNotificationButton = document.querySelector('#cancel-notification');
 
     // Add notification to account on addButton press
-    addButton.addEventListener('click', openAddNotifications)
+    addButton.addEventListener('click', openAddNotifications);
 
     // Modify notifications of account on button press
-    modifyButton.addEventListener('click', modifyNotifications)
+    modifyButton.addEventListener('click', modifyNotifications);
 
+    completeButton.addEventListener('click', showCompleteTasks);
+    confirmCompleteButton.addEventListener('click', confirmCompleteTasks);
 
-    addNotificationButton.addEventListener('click', function () { addNotification(); });
+    addNotificationButton.addEventListener('click', addNotification);
     cancelNotificationButton.addEventListener('click', closeAddNotification);
-
 
     loadNotifications(account);
 }
 
+
+
 main()
+
+// Notification.requestPermission()
+// const notification = new Notification("Hi there!");

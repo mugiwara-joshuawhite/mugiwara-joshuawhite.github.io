@@ -88,10 +88,12 @@ html, body{
 
 .notification-tooltip {
     align-self: flex-start;
-    margin-top: 33px;
+    margin-top: 5px;
+    margin-left: -340px;
 
-    width: 19%;
-    position: fixed;
+    width: 600px;
+    height: 300px;
+    position: absolute;
     display: none;
 }
 

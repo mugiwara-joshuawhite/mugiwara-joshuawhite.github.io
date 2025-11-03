@@ -42,6 +42,7 @@
     padding: 0;
 
     overflow-y: scroll;
+    scrollbar-width: none;
 
     list-style: none;
     word-wrap: break-word;
@@ -51,19 +52,23 @@
     margin: 0;
     padding: 0;
     display: flex;
+
+    padding-right: 10px;
 }
 
 .notification-text {
-    display: block;
+    box-sizing: border-box;
     width: 75%;
 
     padding: 10px;
     margin: 0;
     text-align: left;
     
+    white-space: pre-wrap;
 }
 
 .date-text {
+    box-sizing: border-box;
     padding: 10px;
     margin: 0;
 

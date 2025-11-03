@@ -45,7 +45,8 @@
             <div class="notification-tabs">
                 <button class="button" id="add-button"> Add Notification</button>
                 <button class="button" id="modify-button"> Modify Notifications </button>
-                <button class="button" id="delete-button"> Delete Notifications </button>
+                <button class="button" id="complete-button">  Complete Task </button>
+                <button class="button hidden error-text" id="confirm-complete-button">  Confirm Complete Tasks </button>
             </div>
 
             <!-- Notification Display -->
@@ -54,8 +55,8 @@
 
                 <div class="bar"> </div>
                 <div class="categories">
-                    <p class="notification-text"> <strong> Notification </strong> </p>
-                    <p class="date-text"> <strong> Date </strong> </p>
+                    <p class="notification-text"><strong>Notification</strong></p>
+                    <p class="date-text"><strong>Date</strong></p>
                 </div>
                 <div class="bar"> </div>
 
@@ -67,8 +68,8 @@
         </div>
 
         
-        
         <script src="../../scripts/user-data.js"></script>
+        <script src="notification-handler.js"></script>
         <script src="notification.js"></script>
     </body>
 </html>

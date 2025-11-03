@@ -28,6 +28,11 @@ class Account
         this.notifications = [];
         this.income = [];
         this.expenses = [];
+
+        this.setup = false; //By default, set setup to false to indicate account has not been setup
+        this.streams = [];  //Array of streams, each element should have four parts: [name, amount, rate, day]
+        this.expenses = []; //Array of expenses, each element should have three parts: [name, amount, rate]
+        this.distributions = []; //Array of dostributions, each element should have two parts: [name, percent]
     }
 
     /**
@@ -44,9 +49,22 @@ class Account
             this.name = userData.name;
             this.password = userData.password;
 
+            //Setup data
+            this.setup = userData.setup;
+            this.streams = userData.streams;
+            this.expenses = userData.expenses;
+            this.distributions = userData.distributions;
+
             // Make array if notifications aren't defined yet
             if (userData.notifications)
-                this.notifications = userData.notifications;
+                for (let i = 0; i < userData.notifications.length; i++)
+                {
+                    const notification = userData.notifications[i];
+                    const date = new Date(notification.date);
+                    const text = notification.text;
+                    this.notifications[i] = new UserNotification(text, date);
+                }
+                
             else
                 this.notifications = [];
 
@@ -118,7 +136,7 @@ class UserNotification
     /**
      * 
      * @param {string} text - notification text
-     * @param {string} date - notification date
+     * @param {Date} date - notification date
      */
     constructor(text, date) 
     {

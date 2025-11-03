@@ -1,0 +1,19 @@
+
+.notification-details {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* Notification List */
+.notification-list {
+    align-self: center;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+
+    overflow-y: hidden;
+
+    list-style: none;
+    word-wrap: break-word;
+}
