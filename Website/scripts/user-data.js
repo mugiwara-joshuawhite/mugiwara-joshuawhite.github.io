@@ -57,14 +57,14 @@ class Account
 
             // Make array if notifications aren't defined yet
             if (userData.notifications)
+            {
                 for (let i = 0; i < userData.notifications.length; i++)
                 {
-                    const notification = userData.notifications[i];
-                    const date = new Date(notification.date);
-                    const text = notification.text;
-                    this.notifications[i] = new UserNotification(text, date);
+                    let notification = new UserNotification();
+                    notification.load(userData.notifications[i]);
+                    this.notifications[i] = notification;
                 }
-                
+            }
             else
                 this.notifications = [];
 
@@ -142,10 +142,82 @@ class UserNotification
     {
         this.text = text;
         this.date = date;
+
+        this.dateNotified = null;
         this.isRead = false;
     }
 
-    
+    /**
+     * load notification from input data
+     * @param {Object} userNotificion JSON object containing notification data
+     */
+    load(userNotificion)
+    {   
+        this.date = new Date(userNotificion.date);
+        this.text = userNotificion.text;
+
+        if (userNotificion.dateNotified)
+            this.dateNotified = new Date(userNotificion.dateNotified);
+    }
+
+    /**
+     * Check if notification should be sent, if so send notification
+     */
+    async checkSendNotification()
+    {
+        const currentDate = new Date();
+
+        if (this.dateNotified) // Check if notification has been sent before
+        {
+            let timeSinceLastNotification = currentDate.valueOf() - this.dateNotified.valueOf();
+
+            // 43200000 = 12 hours, if time since notification is greater than 12 hours re-notify
+            if (timeSinceLastNotification > 43200000)
+            {
+                this.notify();
+            }
+        }
+        else // Send notification 
+        {
+            this.notify();
+        }
+    }
+
+    /**
+     * Send notification 
+     */
+    async notify()
+    {
+        // Check if supported by browse
+        if (!("Notification" in window))
+        {
+            alert("no notifications");
+        }
+        else if (Notification.permission === "granted") // if allowed and granted
+        {
+            this.createNotification();
+        }
+        else if (Notification.permission !== "denied") // request permission if they haven't denied previously
+        {
+            await Notification.requestPermission()
+            if (Notification.permission === "granted")
+            {
+                this.createNotification();
+            }
+            else
+            {
+                alert("no permission to notify given");
+            }
+        }
+
+        account.saveToStorage();
+    }
+
+    createNotification()
+    {
+        this.dateNotified = new Date();
+        const notification = new Notification(`${this.text} - ${this.date.toDateString()}`);
+    }
 }
 
 /**
