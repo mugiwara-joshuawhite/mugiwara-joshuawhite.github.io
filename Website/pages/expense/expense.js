@@ -6,6 +6,8 @@
  * from user data. Most of this is from the notification page's code.
  */
 
+let abortController = new AbortController(); // allows for control over event listeners being canceled
+
 function loadExpense()
 {
     const ExpenseArray = account.expenses;
@@ -73,6 +75,11 @@ function loadExpense()
  */
 function openAddExpense()
 {
+    // Abort any operation pre-existing involving the notification and reset the controller
+    // to prepare for any operation using the notification panel
+    abortController.abort()
+    abortController = new AbortController();
+
     // Obtian all buttons
     const createBox = document.querySelector(".create-box");
     const errorText = document.querySelector('.error-text');
@@ -251,7 +258,7 @@ function compareExpenses(transaction1, transaction2)
 /**
  * Open dialog to modify an existing Expense
  */
-function modifyExpense()
+function modifyExpense(index)
 {
     // Obtain notification buttons
     const addNotificationButton = document.querySelector('#add-notification');
@@ -264,8 +271,9 @@ function modifyExpense()
 
     // To modify notificiation we add notification to specified index
     modifyNotificationButton.addEventListener('click', function (){
-        addNotification(index);
-    })
+        addExpense(index)},
+        { signal:abortController.signal }
+    );
 }
 
 /**

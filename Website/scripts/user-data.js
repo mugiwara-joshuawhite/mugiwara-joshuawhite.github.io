@@ -26,8 +26,6 @@ class Account
         this.name = name;
         this.password = password;
         this.notifications = [];
-        this.income = [];
-        this.expenses = [];
 
         this.setup = false; //By default, set setup to false to indicate account has not been setup
         this.streams = [];  //Array of streams, each element should have four parts: [name, amount, rate, day]
@@ -57,14 +55,14 @@ class Account
 
             // Make array if notifications aren't defined yet
             if (userData.notifications)
+            {
                 for (let i = 0; i < userData.notifications.length; i++)
                 {
-                    const notification = userData.notifications[i];
-                    const date = new Date(notification.date);
-                    const text = notification.text;
-                    this.notifications[i] = new UserNotification(text, date);
+                    let notification = new UserNotification();
+                    notification.load(userData.notifications[i]);
+                    this.notifications[i] = notification;
                 }
-                
+            }
             else
                 this.notifications = [];
 
@@ -142,10 +140,82 @@ class UserNotification
     {
         this.text = text;
         this.date = date;
+
+        this.dateNotified = null;
         this.isRead = false;
     }
 
-    
+    /**
+     * load notification from input data
+     * @param {Object} userNotificion JSON object containing notification data
+     */
+    load(userNotificion)
+    {   
+        this.date = new Date(userNotificion.date);
+        this.text = userNotificion.text;
+
+        if (userNotificion.dateNotified)
+            this.dateNotified = new Date(userNotificion.dateNotified);
+    }
+
+    /**
+     * Check if notification should be sent, if so send notification
+     */
+    async checkSendNotification()
+    {
+        const currentDate = new Date();
+
+        if (this.dateNotified) // Check if notification has been sent before
+        {
+            let timeSinceLastNotification = currentDate.valueOf() - this.dateNotified.valueOf();
+
+            // 43200000 = 12 hours, if time since notification is greater than 12 hours re-notify
+            if (timeSinceLastNotification > 43200000)
+            {
+                this.notify();
+            }
+        }
+        else // Send notification 
+        {
+            this.notify();
+        }
+    }
+
+    /**
+     * Send notification 
+     */
+    async notify()
+    {
+        // Check if supported by browse
+        if (!("Notification" in window))
+        {
+            alert("no notifications");
+        }
+        else if (Notification.permission === "granted") // if allowed and granted
+        {
+            this.createNotification();
+        }
+        else if (Notification.permission !== "denied") // request permission if they haven't denied previously
+        {
+            await Notification.requestPermission()
+            if (Notification.permission === "granted")
+            {
+                this.createNotification();
+            }
+            else
+            {
+                alert("no permission to notify given");
+            }
+        }
+
+        account.saveToStorage();
+    }
+
+    createNotification()
+    {
+        this.dateNotified = new Date();
+        const notification = new Notification(`${this.text} - ${this.date.toDateString()}`);
+    }
 }
 
 /**
@@ -157,20 +227,23 @@ class Transaction
     /**
      * 
      * @param {string} text - Name of the transaction
-     * @param {string} type - Type of transaction (i.e. bills, loan, salary, etc.)
      * @param {number} amount - How much money was involved in the transaction
-     * @param {Date} date - When the transaction first happened
+     * @param {Date} date - When the transaction next happens
      * @param {Array} recurrance - How and when the transaction reoccurs, if at all. Empty if not.
      * - First element is a string with type of recurrance (i.e. "daily")
+     *      - "daily" - Every X days
+     *      - "monthly" - Every X weeks
+     *      - "yearly" - Every X years
+     *      - "specificDay" - The Xth day of every Yth month (i.e. the 1st day of every 2nd month (for every other month))
+     *      - "specificDayOfWeek" - The Xth (weekday dropdown) of every Yth month (i.e. the 1st Tuesday of every other month)
      * - Second element is X value of recurrance (i.e. every 30 days, X = 30)
      * - Third element is Y value of recurrance (i.e. 2nd day of every 3rd month, Y = 30)
      * - Fourth element is weekday of recurrance (i.e. every tuesday, "Tuesday")
      * @param {Date} endDate - If reocurring, when the payment stops reocurring
      */
-    constructor(text, type, amount, date, recurrance, endDate)
+    constructor(text, amount, date, recurrance, endDate)
     {
         this.text = text;
-        this.type = type;
         this.amount = amount;
         this.date = date
         this.recurrance = recurrance;

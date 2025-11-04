@@ -6,9 +6,16 @@
  * from user data. Most of this is from the notification page's code.
  */
 
+let abortController = new AbortController(); // allows for control over event listeners being canceled
+
+/*
+*/
 function loadIncome()
 {
-    const incomeArray = account.income;
+    //Variables
+        //income streams
+    const incomeArray = account.streams;
+        //Notifications
     const notificationList = document.querySelector('.notification-list'); 
     notificationList.innerHTML = ''; // clear current notifications displayed
 
@@ -52,7 +59,6 @@ function loadIncome()
         // dude what even is this formatting
         transaction.innerHTML = `
         <p class="transaction-text"> ${incomeArray[i].text}
-        <p class="type-text"> ${incomeArray[i].type}
         <p class="amount-text"> ${incomeArray[i].amount}
         <p class="reoccurance-text"> ${isRecurring}
         `;
@@ -73,13 +79,15 @@ function loadIncome()
  */
 function openAddIncome()
 {
-    // Obtian all buttons
-    const createBox = document.querySelector(".create-box");
-    const errorText = document.querySelector('.error-text');
-    const transactionTextInput = document.querySelector('#transaction-text');
-    const transactionDateInput = document.querySelector('#notification-date');
+    // Abort any operation pre-existing involving the notification and reset the controller
+    // to prepare for any operation using the notification panel
+    abortController.abort()
+    abortController = new AbortController();
 
-    const addNotificationButton = document.querySelector('#add-notification');
+    //Elements
+    const createBox = document.querySelector(".create-box");    //Create box
+    const errorText = document.querySelector('.error-text');    //Error text
+    const addNotificationButton = document.querySelector('#add-notification');  //Add Transaction -> Add
     const modifyNotificationButton = document.querySelector('#modify-notification');
 
     // Reveal add button
@@ -151,17 +159,16 @@ function closeAddIncome()
  */
 function addIncome(index)
 {
-    // Get input fields
-    const transactionTextInput = document.querySelector('#transaction-text');
-    const transactionCategoryInput = document.querySelector('#transaction-category');
-    const transactionAmountInput = document.querySelector('#transaction-amount');
-    const transactionDateInput = document.querySelector('#notification-date');
-    const recurringInput = document.querySelector('#transaction-recurring');
-    const recurringIntervalInput = document.querySelector('#recurring-interval');
-    const endDateInput = document.querySelector('#end-date');
-    const xInput = document.querySelector('#x-text');
-    const weekdayDropdown = document.querySelector('#weekday-dropdown');
-    const yInput = document.querySelector('#y-text');
+    //Elements
+    const transactionTextInput = document.querySelector('#transaction-text');   //Transaction name input
+    const transactionAmountInput = document.querySelector('#transaction-amount');   //Transaction amount input
+    const transactionDateInput = document.querySelector('#notification-date');  //Next pay date
+    const recurringInput = document.querySelector('#transaction-recurring');    //Is recurring?
+    const recurringIntervalInput = document.querySelector('#recurring-interval');   //How often does recur?
+    const endDateInput = document.querySelector('#end-date');   //When ends
+    const xInput = document.querySelector('#x-text');   //Every x day
+    const weekdayDropdown = document.querySelector('#weekday-dropdown');    //Weekday dropdown
+    const yInput = document.querySelector('#y-text');   //Of every y timeframe
 
     // Get error field
     const errorText = document.querySelector('.error-text');
@@ -179,6 +186,7 @@ function addIncome(index)
         }
     }
 
+    //Check for making sure all available fields are filled
     if (transactionTextInput.value.length <= 0 ||
         transactionAmountInput.value.length <= 0 ||
         transactionDateInput.value.length <= 0 ||
@@ -212,8 +220,7 @@ function addIncome(index)
 
         // Create transaction
         let transaction = new Transaction(
-            transactionTextInput.value, 
-            transactionCategoryInput.value,
+            transactionTextInput.value,
             transactionAmountInput.value,
             date,
             recurrance,
@@ -222,11 +229,11 @@ function addIncome(index)
 
         // If index is a number (not undefined) then replace transaction
         if (Number.isInteger(index))
-            account.income[index] = transaction;
+            account.streams[index] = transaction;
         else // else add created transaction to end of list
-            account.income.push(transaction);
+            account.streams.push(transaction);
 
-        account.income.sort(compareIncomes);
+        account.streams.sort(compareIncomes);
         account.saveToStorage(); // save changes to storage
 
         // Reflect changes in notification display
@@ -251,7 +258,7 @@ function compareIncomes(transaction1, transaction2)
 /**
  * Open dialog to modify an existing income
  */
-function modifyIncome()
+function modifyIncome(index)
 {
     // Obtain notification buttons
     const addNotificationButton = document.querySelector('#add-notification');
@@ -264,8 +271,9 @@ function modifyIncome()
 
     // To modify notificiation we add notification to specified index
     modifyNotificationButton.addEventListener('click', function (){
-        addNotification(index);
-    })
+        addIncome(index)},
+        { signal:abortController.signal }
+    );
 }
 
 /**
@@ -321,7 +329,7 @@ function cancelWarning()
  */
 function deleteIncome()
 {
-    console.log(account.income.splice(deleteIndex, 1));
+    console.log(account.streams.splice(deleteIndex, 1));
     account.saveToStorage();
     cancelWarning(); // Make warning dialog disappear
     loadIncome();
@@ -347,32 +355,30 @@ function deleteIncomes()
  */
 async function main()
 {
+    //Load account from storage
     await account.loadFromStorage();
 
-    const addButton = document.querySelector('#add-button');
-    const modifyButton = document.querySelector('#modify-button');
-    const deleteButton = document.querySelector('#delete-button');
+    //Elements
+    const addButton = document.querySelector('#add-button');    //Add Transaction
+    const modifyButton = document.querySelector('#modify-button');  //Modify Transaction
+    const deleteButton = document.querySelector('#delete-button');  //Delete Transaction
     const confirmDelete = document.querySelector('#confirm-delete');
     const cancelDelete = document.querySelector('#cancel-delete');
 
     // Notification creation buttons
-    const addNotificationButton = document.querySelector('#add-notification');
-    const cancelNotificationButton = document.querySelector('#cancel-notification');
+    const addNotificationButton = document.querySelector('#add-notification');  //Add Transaction -> Add
+    const cancelNotificationButton = document.querySelector('#cancel-notification');    //Add Transaction -> Cancel
 
-    // Add notification to account on addButton press
+    //Listeners
     addButton.addEventListener('click', openAddIncome);
-
-    // Modify notifications of account on button press
     modifyButton.addEventListener('click', modifyIncomes);
-
-    // Delete notifications prompts
     deleteButton.addEventListener('click', deleteIncomes);
     confirmDelete.addEventListener('click', deleteIncome);
     cancelDelete.addEventListener('click', cancelWarning);
-
     addNotificationButton.addEventListener('click', function () { addIncome(); });
     cancelNotificationButton.addEventListener('click', closeAddIncome);
 
+    //Load incomes upon opening page
     loadIncome(account);
 }
 

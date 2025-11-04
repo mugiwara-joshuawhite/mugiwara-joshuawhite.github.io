@@ -1,5 +1,8 @@
 /**
- *  Collection of functions that hide or show dropdowns
+ * @author Joshua White
+ * @license Zlib
+ * @since 2025-10-13
+ * @description Collection of functions that assist setup page
  */
 function showOrHideIncomeSelect() {
 
@@ -161,6 +164,9 @@ async function collect() {
 
         //Save account to storage
         await account.saveToStorage();
+
+        //Go to homepage
+        window.location.href = "../home/index.html"
     }
 }
 
