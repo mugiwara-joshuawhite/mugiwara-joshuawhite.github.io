@@ -164,7 +164,7 @@ class Transaction
      * - Fourth element is weekday of recurrance (i.e. every tuesday, "Tuesday")
      * @param {Date} endDate - If reocurring, when the payment stops reocurring
      */
-    constructor(text, type, amount, date, recurrance, endDate)
+    constructor(text, amount, date, recurrance, endDate)
     {
         this.text = text;
         this.amount = amount;

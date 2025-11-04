@@ -85,13 +85,10 @@ function openAddIncome()
     abortController.abort()
     abortController = new AbortController();
 
-    // Obtian all buttons
-    const createBox = document.querySelector(".create-box");
-    const errorText = document.querySelector('.error-text');
-    const transactionTextInput = document.querySelector('#transaction-text');
-    const transactionDateInput = document.querySelector('#notification-date');
-
-    const addNotificationButton = document.querySelector('#add-notification');
+    //Elements
+    const createBox = document.querySelector(".create-box");    //Create box
+    const errorText = document.querySelector('.error-text');    //Error text
+    const addNotificationButton = document.querySelector('#add-notification');  //Add Transaction -> Add
     const modifyNotificationButton = document.querySelector('#modify-notification');
 
     // Reveal add button
@@ -363,29 +360,25 @@ async function main()
 
     //Elements
     const addButton = document.querySelector('#add-button');    //Add Transaction
-    const modifyButton = document.querySelector('#modify-button');  //
-    const deleteButton = document.querySelector('#delete-button');
+    const modifyButton = document.querySelector('#modify-button');  //Modify Transaction
+    const deleteButton = document.querySelector('#delete-button');  //Delete Transaction
     const confirmDelete = document.querySelector('#confirm-delete');
     const cancelDelete = document.querySelector('#cancel-delete');
 
     // Notification creation buttons
-    const addNotificationButton = document.querySelector('#add-notification');
-    const cancelNotificationButton = document.querySelector('#cancel-notification');
+    const addNotificationButton = document.querySelector('#add-notification');  //Add Transaction -> Add
+    const cancelNotificationButton = document.querySelector('#cancel-notification');    //Add Transaction -> Cancel
 
-    // Add notification to account on addButton press
+    //Listeners
     addButton.addEventListener('click', openAddIncome);
-
-    // Modify notifications of account on button press
     modifyButton.addEventListener('click', modifyIncomes);
-
-    // Delete notifications prompts
     deleteButton.addEventListener('click', deleteIncomes);
     confirmDelete.addEventListener('click', deleteIncome);
     cancelDelete.addEventListener('click', cancelWarning);
-
     addNotificationButton.addEventListener('click', function () { addIncome(); });
     cancelNotificationButton.addEventListener('click', closeAddIncome);
 
+    //Load incomes upon opening page
     loadIncome(account);
 }
 
