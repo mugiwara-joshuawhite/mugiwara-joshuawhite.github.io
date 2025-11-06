@@ -18,8 +18,6 @@ class Account
      * to load user data
      * @param {string} name username of account
      * @param {string} password password of account
-     * @param {Array} income - Transactions of income
-     * @param {Array} expenses - Transactions of expenses
      */
     constructor(name, password)
     {
@@ -66,11 +64,11 @@ class Account
             else
                 this.notifications = [];
 
-            // Ditto above for income
-            if (userData.income)
-                this.income = userData.income;
+            // Ditto above for streams
+            if (userData.streams)
+                this.streams = userData.streams;
             else
-                this.income = [];
+                this.streams = [];
 
             // Ditto above for expenses
             if (userData.expenses)

@@ -1,5 +1,5 @@
 /* Page layout (totally not copy pasted) */
-.notification-page {
+.expense-page {
     height: 95vh;
 
     display: flex;
@@ -7,7 +7,7 @@
     
 }
 
-.notification-tabs {
+.expense-tabs {
     display: flex;
     flex-direction: column;
 
@@ -15,13 +15,13 @@
     background-color: #565a5c;
 }
 
-.notification-details {
+.expense-details {
     display: flex;
     flex-direction: column;
     width: 75%;
 }
 
-.notification-title {
+.expense-title {
     font-size: xx-large;
     font-weight: bold;
 
@@ -35,8 +35,8 @@
 }
 
 
-/* Notification List */
-.notification-list {
+/* Expense List */
+.expense-list {
     max-width: 100%;
     margin: 0;
     padding: 0;
@@ -51,6 +51,7 @@
     margin: 0;
     padding: 0;
     display: flex;
+    justify-content:space-evenly;
 }
 
 .transaction-text {
@@ -192,7 +193,7 @@
     margin-right: 20px;
 }
 
-.notification-detail-box {
+.expense-detail-box {
     justify-self: center;
     width: 50%;
 }

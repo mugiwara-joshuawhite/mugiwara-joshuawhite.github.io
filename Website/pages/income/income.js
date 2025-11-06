@@ -3,21 +3,21 @@
  * @license Zlib
  * @since 2025-10-27
  * @description Creates, modifies, removes, and displays income
- * from user data. Most of this is from the notification page's code.
+ * from user data. Most of this is from the notification page's code. (not anymore)
  */
 
 let abortController = new AbortController(); // allows for control over event listeners being canceled
 
 /*
 */
-function loadIncome()
+function loadIncome(userAccount)
 {
     //Variables
         //income streams
-    const incomeArray = account.streams;
-        //Notifications
-    const notificationList = document.querySelector('.notification-list'); 
-    notificationList.innerHTML = ''; // clear current notifications displayed
+    const incomeArray = userAccount.streams;
+        //Incomes
+    const incomeList = document.querySelector('.income-list'); 
+    incomeList.innerHTML = ''; // clear current notifications displayed
 
     // For all notifications in the list, load a notification in the display
     for(let i = 0; i < incomeArray.length; i++)
@@ -67,10 +67,10 @@ function loadIncome()
         transaction.innerHTML = 
             `<input type="checkbox" class="hidden checkbox" id="checkbox-${i}">`
             + transaction.innerHTML;
-        notificationList.appendChild(transaction);
-        notificationList.appendChild(modifyButton);
-        notificationList.appendChild(deleteButton);
-        notificationList.appendChild(divider);
+        incomeList.appendChild(transaction);
+        incomeList.appendChild(modifyButton);
+        incomeList.appendChild(deleteButton);
+        incomeList.appendChild(divider);
     }
 }
 
@@ -87,8 +87,8 @@ function openAddIncome()
     //Elements
     const createBox = document.querySelector(".create-box");    //Create box
     const errorText = document.querySelector('.error-text');    //Error text
-    const addNotificationButton = document.querySelector('#add-notification');  //Add Transaction -> Add
-    const modifyNotificationButton = document.querySelector('#modify-notification');
+    const addNotificationButton = document.querySelector('#add-income');  //Add Transaction -> Add
+    const modifyNotificationButton = document.querySelector('#modify-income');
 
     // Reveal add button
     addNotificationButton.classList.remove('hidden');
@@ -162,7 +162,7 @@ function addIncome(index)
     //Elements
     const transactionTextInput = document.querySelector('#transaction-text');   //Transaction name input
     const transactionAmountInput = document.querySelector('#transaction-amount');   //Transaction amount input
-    const transactionDateInput = document.querySelector('#notification-date');  //Next pay date
+    const transactionDateInput = document.querySelector('#income-date');  //Next pay date
     const recurringInput = document.querySelector('#transaction-recurring');    //Is recurring?
     const recurringIntervalInput = document.querySelector('#recurring-interval');   //How often does recur?
     const endDateInput = document.querySelector('#end-date');   //When ends
@@ -237,7 +237,7 @@ function addIncome(index)
         account.saveToStorage(); // save changes to storage
 
         // Reflect changes in notification display
-        loadIncome();
+        loadIncome(account);
         closeAddIncome();
     }
 }
@@ -261,16 +261,16 @@ function compareIncomes(transaction1, transaction2)
 function modifyIncome(index)
 {
     // Obtain notification buttons
-    const addNotificationButton = document.querySelector('#add-notification');
-    const modifyNotificationButton = document.querySelector('#modify-notification');
+    const addIncomeButton = document.querySelector('#add-income');
+    const modifyIncomeButton = document.querySelector('#modify-income');
 
     // Hide add button and reveal modify button
     openAddIncome();
-    addNotificationButton.classList.add('hidden');
-    modifyNotificationButton.classList.remove('hidden');
+    addIncomeButton.classList.add('hidden');
+    modifyIncomeButton.classList.remove('hidden');
 
     // To modify notificiation we add notification to specified index
-    modifyNotificationButton.addEventListener('click', function (){
+    modifyIncomeButton.addEventListener('click', function (){
         addIncome(index)},
         { signal:abortController.signal }
     );
@@ -332,7 +332,7 @@ function deleteIncome()
     console.log(account.streams.splice(deleteIndex, 1));
     account.saveToStorage();
     cancelWarning(); // Make warning dialog disappear
-    loadIncome();
+    loadIncome(account);
     deleteIncomes(); // Keep the delete options open
 }
 
@@ -362,21 +362,23 @@ async function main()
     const addButton = document.querySelector('#add-button');    //Add Transaction
     const modifyButton = document.querySelector('#modify-button');  //Modify Transaction
     const deleteButton = document.querySelector('#delete-button');  //Delete Transaction
+
     const confirmDelete = document.querySelector('#confirm-delete');
     const cancelDelete = document.querySelector('#cancel-delete');
 
     // Notification creation buttons
-    const addNotificationButton = document.querySelector('#add-notification');  //Add Transaction -> Add
-    const cancelNotificationButton = document.querySelector('#cancel-notification');    //Add Transaction -> Cancel
+    const addIncomeButton = document.querySelector('#add-income');  //Add Transaction -> Add
+    const cancelIncomeButton = document.querySelector('#cancel-income');    //Add Transaction -> Cancel
 
     //Listeners
     addButton.addEventListener('click', openAddIncome);
     modifyButton.addEventListener('click', modifyIncomes);
     deleteButton.addEventListener('click', deleteIncomes);
+
     confirmDelete.addEventListener('click', deleteIncome);
     cancelDelete.addEventListener('click', cancelWarning);
-    addNotificationButton.addEventListener('click', function () { addIncome(); });
-    cancelNotificationButton.addEventListener('click', closeAddIncome);
+    addIncomeButton.addEventListener('click', function () { addIncome(); });
+    cancelIncomeButton.addEventListener('click', closeAddIncome);
 
     //Load incomes upon opening page
     loadIncome(account);
