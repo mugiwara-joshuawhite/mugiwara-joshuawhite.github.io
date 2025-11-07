@@ -42,6 +42,7 @@
     padding: 0;
 
     overflow-y: scroll;
+    scrollbar-width: none;
 
     list-style: none;
     word-wrap: break-word;
