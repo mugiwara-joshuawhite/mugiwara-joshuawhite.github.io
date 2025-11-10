@@ -277,16 +277,25 @@ function modifyIncome(index)
 }
 
 /**
- * Show or hide modify income buttons on the income list
+ * Show or hide modify Income buttons on the Income list
  */
-function modifyIncomes()
+function showOrHideModifyIncomes()
 {
     const modifyButtons = document.querySelectorAll(".modify-button");
-
+    const deleteButtons = document.querySelectorAll(".delete-button");
 
     for(let i = 0; i < modifyButtons.length; i++)
     {
         modifyButtons[i].classList.toggle('hidden');
+    }
+
+    //For some reason I couldn't do this in the other for loop
+    //because of an out-of-bound error despite the fact they should
+    //be the same length >:(
+    for (let i = 0; i < deleteButtons.length; i++) {
+        if (!deleteButtons[i].classList.contains('hidden')) {
+            deleteButtons[i].classList.toggle('hidden');
+        }
     }
 }
 
@@ -337,15 +346,25 @@ function deleteIncome()
 }
 
 /**
- * Open or close delete income buttons on the income list
+ * Show or hide delete Income buttons on Income list
  */
-function deleteIncomes()
+function showOrHideDeleteIncomes()
 {
     const deleteButtons = document.querySelectorAll(".delete-button");
+    const modifyButtons = document.querySelectorAll(".modify-button");
 
     for(let i = 0; i < deleteButtons.length; i++)
     {
         deleteButtons[i].classList.toggle('hidden');
+    }
+
+    //For some reason I couldn't do this in the other for loop
+    //because of an out-of-bound error despite the fact they should
+    //be the same length >:(
+    for (let i = 0; i < modifyButtons.length; i++) {
+        if (!modifyButtons[i].classList.contains('hidden')) {
+            modifyButtons[i].classList.toggle('hidden');
+        }
     }
 }
 
@@ -372,8 +391,8 @@ async function main()
 
     //Listeners
     addButton.addEventListener('click', openAddIncome);
-    modifyButton.addEventListener('click', modifyIncomes);
-    deleteButton.addEventListener('click', deleteIncomes);
+    modifyButton.addEventListener('click', showOrHideModifyIncomes);
+    deleteButton.addEventListener('click', showOrHideDeleteIncomes);
 
     confirmDelete.addEventListener('click', deleteIncome);
     cancelDelete.addEventListener('click', cancelWarning);

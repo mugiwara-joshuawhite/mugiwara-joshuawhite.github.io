@@ -276,18 +276,25 @@ function modifyExpense(index)
 }
 
 /**
- * Show or hide modify Expense buttons on the Expense list
- * TODO: If you press Modify Transaction and then Delete Transaction or vice versa, 
- * both appear. we should make it so that one hides if the other appears
+ * Show or hide modify Expense buttons on the Expenses list
  */
-function modifyExpenses()
+function showOrHideModifyExpenses()
 {
     const modifyButtons = document.querySelectorAll(".modify-button");
-
+    const deleteButtons = document.querySelectorAll(".delete-button");
 
     for(let i = 0; i < modifyButtons.length; i++)
     {
         modifyButtons[i].classList.toggle('hidden');
+    }
+
+    //For some reason I couldn't do this in the other for loop
+    //because of an out-of-bound error despite the fact they should
+    //be the same length >:(
+    for (let i = 0; i < deleteButtons.length; i++) {
+        if (!deleteButtons[i].classList.contains('hidden')) {
+            deleteButtons[i].classList.toggle('hidden');
+        }
     }
 }
 
@@ -338,17 +345,25 @@ function deleteExpense()
 }
 
 /**
- * Open or close delete Expense buttons on the Expense list
- * TODO: If you press Modify Transaction and then Delete Transaction or vice versa, 
- * both appear. we should make it so that one hides if the other appears
+ * Show or hide delete Expense buttons on Expense list
  */
-function deleteExpenses()
+function showOrHideDeleteExpenses()
 {
     const deleteButtons = document.querySelectorAll(".delete-button");
+    const modifyButtons = document.querySelectorAll(".modify-button");
 
     for(let i = 0; i < deleteButtons.length; i++)
     {
         deleteButtons[i].classList.toggle('hidden');
+    }
+
+    //For some reason I couldn't do this in the other for loop
+    //because of an out-of-bound error despite the fact they should
+    //be the same length >:(
+    for (let i = 0; i < modifyButtons.length; i++) {
+        if (!modifyButtons[i].classList.contains('hidden')) {
+            modifyButtons[i].classList.toggle('hidden');
+        }
     }
 }
 
@@ -374,10 +389,10 @@ async function main()
     addButton.addEventListener('click', openAddExpense);
 
     // Modify expenses of account on button press
-    modifyButton.addEventListener('click', modifyExpenses);
+    modifyButton.addEventListener('click', showOrHideModifyExpenses);
 
     // Delete expenses prompts
-    deleteButton.addEventListener('click', deleteExpenses);
+    deleteButton.addEventListener('click', showOrHideDeleteExpenses);
     confirmDelete.addEventListener('click', deleteExpense);
     cancelDelete.addEventListener('click', cancelWarning);
 

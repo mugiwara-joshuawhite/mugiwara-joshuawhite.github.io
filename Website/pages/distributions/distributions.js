@@ -135,7 +135,7 @@ async function addDistribution(index) {
 
     //Error text
     const errorText = document.querySelector('#error-add');
-    const percentageText = document.querySelector("#");
+    const xperc = document.querySelector('#percent');
 
     //Check for valid input
     if (distName.value != "") {
@@ -152,6 +152,7 @@ async function addDistribution(index) {
              //Refresh
             distName.value = "";
             distAmount.value = 1;
+            xperc.innerHTML = "1%";
             await account.saveToStorage();
             loadDistributions();
             closeAddDistribution();
@@ -169,23 +170,30 @@ async function addDistribution(index) {
 }
 
 /**
- * Show or hide modify Expense buttons on the Expense list
- * TODO: If you press Modify Transaction and then Delete Transaction or vice versa, 
- * both appear. we should make it so that one hides if the other appears
+ * Show or hide modify Distribution buttons on the Distribution list
  */
 function showOrHideModifyDistributions()
 {
     const modifyButtons = document.querySelectorAll(".modify-button");
-
+    const deleteButtons = document.querySelectorAll(".delete-button");
 
     for(let i = 0; i < modifyButtons.length; i++)
     {
         modifyButtons[i].classList.toggle('hidden');
     }
+
+    //For some reason I couldn't do this in the other for loop
+    //because of an out-of-bound error despite the fact they should
+    //be the same length >:(
+    for (let i = 0; i < deleteButtons.length; i++) {
+        if (!deleteButtons[i].classList.contains('hidden')) {
+            deleteButtons[i].classList.toggle('hidden');
+        }
+    }
 }
 
 /**
- * Open dialog to modify an existing Expense
+ * Open dialog to modify an existing Distribution
  */
 function modifyDistribution(index)
 {
@@ -205,6 +213,29 @@ function modifyDistribution(index)
     );
 }
 
+/**
+ * Show or hide delete Distribution buttons on Distribution list
+ */
+function showOrHideDeleteDistributions()
+{
+    const deleteButtons = document.querySelectorAll(".delete-button");
+    const modifyButtons = document.querySelectorAll(".modify-button");
+
+    for(let i = 0; i < deleteButtons.length; i++)
+    {
+        deleteButtons[i].classList.toggle('hidden');
+    }
+
+    //For some reason I couldn't do this in the other for loop
+    //because of an out-of-bound error despite the fact they should
+    //be the same length >:(
+    for (let i = 0; i < modifyButtons.length; i++) {
+        if (!modifyButtons[i].classList.contains('hidden')) {
+            modifyButtons[i].classList.toggle('hidden');
+        }
+    }
+}
+
 async function main() {
 
     //Get account
@@ -222,7 +253,7 @@ async function main() {
     //Listeners
     addButton.addEventListener('click', openAddDistribution);
     modifyButton.addEventListener('click', showOrHideModifyDistributions);
-    deleteButton.addEventListener('click', function() {window.alert("not done :3")});
+    deleteButton.addEventListener('click', showOrHideDeleteDistributions);
     cancelDistributionButton.addEventListener('click', closeAddDistribution);
     distributionSlider.addEventListener('input', function() {
         percentageText.innerHTML = distributionSlider.value + "%";
