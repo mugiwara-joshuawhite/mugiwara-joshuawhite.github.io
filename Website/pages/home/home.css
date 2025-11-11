@@ -39,10 +39,15 @@ li {
     align-items: flex-start;
     
     width: 40%;
+    max-height: 250px;
+
+    overflow-y:scroll;
 }
 
 .finance-header {
-    width: 100%;
+    /*Made a bit smaller because it was causing issues
+    with overflow*/
+    width: 95%;
 
     background-color: #454849;
     padding-top: 15px;
@@ -62,7 +67,7 @@ li {
 
 .finance-category {
     align-self: center;
-    width: 90%;
+    width: 85%;
 
     font-weight: bold;
 
