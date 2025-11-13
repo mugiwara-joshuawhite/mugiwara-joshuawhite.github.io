@@ -31,26 +31,45 @@ function loadIncome() {
         //Fill out category
         category.innerHTML = streams[i].text;
         category.classList.add("finance-category");
-        //TODO: add event listener to expand stream on category
 
-        items[0].innerHTML = "Amount: $";
+        items[0].innerHTML = "Amount: ";
         items[1].innerHTML = "Next Payday: ";
         items[2].innerHTML = "Goes until: ";
         
-        //TODO: Format dates better
-        data[0].innerHTML = addCommasToInt(streams[i].amount);
+        data[0].innerHTML = "$" + addCommasToInt(streams[i].amount);
         data[1].innerHTML = prettyDate(new Date(streams[i].date));
         data[2].innerHTML = prettyDate(new Date(streams[i].endDate));
 
         //Recurrance data
             //If this stream recurs
         if (streams[i].recurrance.length > 0) {
+            //Add new list item
             items.push(document.createElement('li'));
             data.push(document.createElement('span'));
+
+            //Give it proper data
             items[3].innerHTML = "Recurrance: ";
             data[3].innerHTML = prettyRecurrance(streams[i].recurrance);
+
+            //know now that stream length is 4, not 3
             streamLength = 4;
+
+            //Hide new data
+            items[3].classList.add('hidden');
         }
+
+        //Hide list items that won't be shown until label clicked
+        items[2].classList.add('hidden');
+
+          //Shows extra data upon clicking label
+        category.addEventListener('click', function() {
+            if (streamLength >= 3) {
+                items[2].classList.toggle('hidden')
+            }
+            if (streamLength == 4) {
+                items[3].classList.toggle('hidden');
+            }
+        });
         
         //If there were a way to know how many values an object had i would do this differently
         for (let j = 0; j < streamLength; j++) {
@@ -65,17 +84,17 @@ function loadIncome() {
 }
 
 function loadExpense() {
-    
+
     //Values
     const expenses = account.expenses;    //Data to show
-    const incomeList = document.querySelector(".income-list");  //Where to show the data
+    const expenseList = document.querySelector(".expense-list");  //Where to show the data
 
     //Loop through streams
-    for (let i = 0; i < streams.length; i++) {
+    for (let i = 0; i < expenses.length; i++) {
 
         //Other variables
-            //3 is the smallest a fincance object can be
-        let streamLength = 3;
+            //3 is the smallest a finance object can be
+        let expenseLength = 3;
 
         //Main parts of a stream, the name and the data
         let category = document.createElement('button');
@@ -92,38 +111,57 @@ function loadExpense() {
         ];
 
         //Fill out category
-        category.innerHTML = streams[i].text;
+        category.innerHTML = expenses[i].text;
         category.classList.add("finance-category");
-        //TODO: add event listener to expand stream on category
 
-        items[0].innerHTML = "Amount: $";
-        items[1].innerHTML = "Next Payday: ";
+        items[0].innerHTML = "Amount: ";
+        items[1].innerHTML = "Next Due Date: ";
         items[2].innerHTML = "Goes until: ";
         
-        //TODO: Format dates better
-        data[0].innerHTML = addCommasToInt(streams[i].amount);
-        data[1].innerHTML = prettyDate(new Date(streams[i].date));
-        data[2].innerHTML = prettyDate(new Date(streams[i].endDate));
+        data[0].innerHTML = "$" + addCommasToInt(expenses[i].amount);
+        data[1].innerHTML = prettyDate(new Date(expenses[i].date));
+        data[2].innerHTML = prettyDate(new Date(expenses[i].endDate));
 
         //Recurrance data
             //If this stream recurs
-        if (streams[i].recurrance.length > 0) {
+        if (expenses[i].recurrance.length > 0) {
+            //Add new list item
             items.push(document.createElement('li'));
             data.push(document.createElement('span'));
+
+            //Give it proper data
             items[3].innerHTML = "Recurrance: ";
-            data[3].innerHTML = prettyRecurrance(streams[i].recurrance);
-            streamLength = 4;
+            data[3].innerHTML = prettyRecurrance(expenses[i].recurrance);
+
+            //know now that stream length is 4, not 3
+            expenseLength = 4;
+
+            //Hide new data
+            items[3].classList.add('hidden');
         }
+
+        //Hide list items that won't be shown until label clicked
+        items[2].classList.add('hidden');
+
+          //Shows extra data upon clicking label
+        category.addEventListener('click', function() {
+            if (expenseLength >= 3) {
+                items[2].classList.toggle('hidden')
+            }
+            if (expenseLength == 4) {
+                items[3].classList.toggle('hidden');
+            }
+        });
         
         //If there were a way to know how many values an object had i would do this differently
-        for (let j = 0; j < streamLength; j++) {
-            data[j].classList.add('income-text');
+        for (let j = 0; j < expenseLength; j++) {
+            data[j].classList.add('expense-text');
             items[j].appendChild(data[j]);
             list.appendChild(items[j]);
         }
 
-        incomeList.appendChild(category);
-        incomeList.appendChild(list);
+        expenseList.appendChild(category);
+        expenseList.appendChild(list);
     }
 }
 
@@ -311,6 +349,7 @@ async function main() {
     await account.loadFromStorage();
 
     loadIncome();
+    loadExpense();
 }
 
 main();
