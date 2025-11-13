@@ -33,45 +33,51 @@
             <button class="button" id="button-add-stream">Add Income Stream</button>
 
             <div class="hidden dropdownbox" id="stream-selector">
+
+                <div class="inputfield">
+                    <label for="stream-name">Name the income stream...</label>
+                    <input type="text" class="inputbox" id="acc-stream-name">
+                </div>
+
+                <div class="inputfield">
+                    <label for="pay-amount">Amount...</label>
+                    <input type="number" class="inputbox" id="acc-pay-amount">
+                </div>
                 
-                <br>
-                <label for="pay-day">I get paid on...</label>
-                <select class="inputbox" id="acc-pay-day">
-                    <option value="" selected disabled></option>
-                    <option value="sun">Sundays</option>
-                    <option value="mon">Mondays</option>
-                    <option value="tue">Tuesdays</option>
-                    <option value="wed">Wednesdays</option>
-                    <option value="thu">Thursdays</option>
-                    <option value="fri">Fridays</option>
-                    <option value="sat">Saturdays</option>
-                </select>
 
-                <br>
-                <label for="pay-rate">At a rate of...</label>
-                <select class="inputbox" id="acc-pay-rate">
-                    <option value="" selected disabled></option>
-                    <option value="1">Weekly</option>
-                    <option value="2">Biweekly</option>
-                    <option value="3">First of the month</option>
-                    <option value="4">Second of the month</option>
-                    <option value="5">Third of the month</option>
-                    <option value="6">Fourth of the month</option>
-                </select>
-                <p style="color:red">
-                    IMPORTANT - BIWEEKLY HERE IS USED TO REFER TO
-                    ONCE EVERY TWO WEEKS
-                </p>
+                <div class="inputfield">
+                    <label for="pay-day">I next get paid...</label>
+                    <input type="date" class="inputbox" id="acc-pay-day">
+                </div>
 
-                <br>
-                <label for="pay-amount">Amount...</label>
-                <input type="number" class="inputbox" id="acc-pay-amount">
+                
+                <!--Specifically for streams I assume that there is recurrence-->
 
-                <br>
-                <label for="stream-name">Name the income stream...</label>
-                <input type="text" class="inputbox" id="acc-stream-name">
+                <div class="inputfield">
+                    <label for="pay-rate-type">At a rate of...</label>
+                    <select class="inputbox" id="acc-pay-rate-type" 
+                        style="font-size:0.60em;" onchange="showRecurranceOptionsStream()">
+                        <option value="daily">Every _ days</option>
+                        <option value="monthly">Every _ months</option>
+                        <option value="yearly">Every _ years</option>
+                        <option value="specificDay">Every _ day of every _ month</option>
+                        <option value="specificDayOfWeek">Every _ day of the week of every _ month</option>
+                    </select>
+                </div>
+              
 
-                <br>
+                <div class="inputfield">
+                    <label for="pay-rate-x">First blank</label>
+                    <input type="number" class="inputbox" id="acc-pay-rate-x">
+                </div>
+
+                <div class="inputfield">
+                    <label for="pay-rate-y" class="hidden" id="label-acc-pay-rate-y">Second blank</label>
+                    <input type="number" class="hidden inputbox" id="acc-pay-rate-y">
+                </div>
+
+                <!--It will be assumed that income streams don't end until user modifies
+                the stream in income page-->
                 <button class="button" id="button-submit-stream">Submit</button>
 
                 <p class="hidden error-text" id="stream-error-text"></p>
@@ -81,31 +87,61 @@
         <hr>
 
         <!--Where user adds expenses-->
-        <div class="selectionarea" id="expenses-select">
-            <p>Now add expenses like rent and bills!</p>
+        <div class="selectionarea" id="expense-select">
+            <p>Next, add some expenses!</p>
             <button class="button" id="button-add-expense">Add Expense</button>
 
             <div class="hidden dropdownbox" id="expense-selector">
 
-                <br>
-                <label for="expense-form">I pay this expense every [] days.</label>
-                <input type="number" class="inputbox" id="acc-expense-rate">
+                <div class="inputfield">
+                    <label for="expense-name">Name the expense...</label>
+                    <input type="text" class="inputbox" id="acc-expense-name">
+                </div>
+
+                <div class="inputfield">
+                    <label for="expense-amount">Amount...</label>
+                    <input type="number" class="inputbox" id="acc-expense-amount">
+                </div>
                 
-                <br>
-                <label for="expense-amount">I pay $[] for this expense</label>
-                <input type="number" class="inputbox" id="acc-expense-amount">
 
-                <br>
-                <label for="expense-name">Name the expense...</label>
-                <input type="text" class="inputbox" id="acc-expense-name">
+                <div class="inputfield">
+                    <label for="expense-due-date">I next pay this...</label>
+                    <input type="date" class="inputbox" id="acc-expense-duedate">
+                </div>
 
-                <br>
+                
+                <!--Specifically for these expenses I assume that there is recurrence-->
+
+                <div class="inputfield">
+                    <label for="expense-rate-type">At a rate of...</label>
+                    <select class="inputbox" id="acc-expense-rate-type" 
+                        style="font-size:0.60em;" onchange="showRecurranceOptionsExpense()">
+                        <option value="daily">Every _ days</option>
+                        <option value="monthly">Every _ months</option>
+                        <option value="yearly">Every _ years</option>
+                        <option value="specificDay">Every _ day of every _ month</option>
+                        <option value="specificDayOfWeek">Every _ day of the week of every _ month</option>
+                    </select>
+                </div>
+              
+
+                <div class="inputfield">
+                    <label for="expense-rate-x">First blank</label>
+                    <input type="number" class="inputbox" id="acc-expense-rate-x">
+                </div>
+
+                <div class="inputfield">
+                    <label for="expense-rate-y" class="hidden" id="label-acc-expense-rate-y">Second blank</label>
+                    <input type="number" class="hidden inputbox" id="acc-expense-rate-y">
+                </div>
+
+                <!--It will be assumed that income streams don't end until user modifies
+                the stream in income page-->
                 <button class="button" id="button-submit-expense">Submit</button>
 
                 <p class="hidden error-text" id="expense-error-text"></p>
 
             </div>
-
         </div>
         <hr>
 

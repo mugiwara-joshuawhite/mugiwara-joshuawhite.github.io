@@ -11,10 +11,10 @@ let abortController = new AbortController(); // allows for control over event li
 function loadExpense()
 {
     const ExpenseArray = account.expenses;
-    const notificationList = document.querySelector('.notification-list'); 
-    notificationList.innerHTML = ''; // clear current notifications displayed
+    const expenseList = document.querySelector('.expense-list'); 
+    expenseList.innerHTML = ''; // clear current expenses displayed
 
-    // For all notifications in the list, load a notification in the display
+    // For all expenses in the list, load a expense in the display
     for(let i = 0; i < ExpenseArray.length; i++)
     {
         let transaction = document.createElement('li');
@@ -26,7 +26,7 @@ function loadExpense()
         modifyButton.classList.add('modify-button');
         modifyButton.classList.add('hidden');
 
-        // Bind modify button to modify notification at index
+        // Bind modify button to modify expense at index
         modifyButton.addEventListener('click', function(){
             modifyExpense(i);
         })
@@ -36,7 +36,7 @@ function loadExpense()
         deleteButton.classList.add('delete-button');
         deleteButton.classList.add('hidden');
 
-        // Bind delete button to delete notification at index
+        // Bind delete button to delete expense at index
         deleteButton.addEventListener('click', function(){
             deleteWarning(i);
         })
@@ -54,19 +54,18 @@ function loadExpense()
         // dude what even is this formatting
         transaction.innerHTML = `
         <p class="transaction-text"> ${ExpenseArray[i].text}
-        <p class="type-text"> ${ExpenseArray[i].type}
         <p class="amount-text"> ${ExpenseArray[i].amount}
         <p class="reoccurance-text"> ${isRecurring}
         `;
 
-        // Add Notification to the list.
+        // Add expense to the list.
         transaction.innerHTML = 
             `<input type="checkbox" class="hidden checkbox" id="checkbox-${i}">`
             + transaction.innerHTML;
-        notificationList.appendChild(transaction);
-        notificationList.appendChild(modifyButton);
-        notificationList.appendChild(deleteButton);
-        notificationList.appendChild(divider);
+        expenseList.appendChild(transaction);
+        expenseList.appendChild(modifyButton);
+        expenseList.appendChild(deleteButton);
+        expenseList.appendChild(divider);
     }
 }
 
@@ -75,23 +74,25 @@ function loadExpense()
  */
 function openAddExpense()
 {
-    // Abort any operation pre-existing involving the notification and reset the controller
-    // to prepare for any operation using the notification panel
+    // Abort any operation pre-existing involving the expense and reset the controller
+    // to prepare for any operation using the expense panel
     abortController.abort()
     abortController = new AbortController();
 
     // Obtian all buttons
     const createBox = document.querySelector(".create-box");
     const errorText = document.querySelector('.error-text');
-    const transactionTextInput = document.querySelector('#transaction-text');
-    const transactionDateInput = document.querySelector('#notification-date');
 
-    const addNotificationButton = document.querySelector('#add-notification');
-    const modifyNotificationButton = document.querySelector('#modify-notification');
+    //Commented these out cause they weren't being used.
+    //const transactionTextInput = document.querySelector('#transaction-text');
+    //const transactionDateInput = document.querySelector('#expense-date');
+
+    const addExpenseButton = document.querySelector('#add-expense');
+    const modifyExpenseButton = document.querySelector('#modify-expense');
 
     // Reveal add button
-    addNotificationButton.classList.remove('hidden');
-    modifyNotificationButton.classList.add('hidden');
+    addExpenseButton.classList.remove('hidden');
+    modifyExpenseButton.classList.add('hidden');
 
     // clear input fields on open
     // transactionTextInput.value = "";
@@ -160,9 +161,8 @@ function addExpense(index)
 {
     // Get input fields
     const transactionTextInput = document.querySelector('#transaction-text');
-    const transactionCategoryInput = document.querySelector('#transaction-category');
     const transactionAmountInput = document.querySelector('#transaction-amount');
-    const transactionDateInput = document.querySelector('#notification-date');
+    const transactionDateInput = document.querySelector('#expense-date');
     const recurringInput = document.querySelector('#transaction-recurring');
     const recurringIntervalInput = document.querySelector('#recurring-interval');
     const endDateInput = document.querySelector('#end-date');
@@ -219,8 +219,7 @@ function addExpense(index)
 
         // Create transaction
         let transaction = new Transaction(
-            transactionTextInput.value, 
-            transactionCategoryInput.value,
+            transactionTextInput.value,
             transactionAmountInput.value,
             date,
             recurrance,
@@ -236,7 +235,7 @@ function addExpense(index)
         account.expenses.sort(compareExpenses);
         account.saveToStorage(); // save changes to storage
 
-        // Reflect changes in notification display
+        // Reflect changes in expense display
         loadExpense();
         closeAddExpense();
     }
@@ -260,33 +259,42 @@ function compareExpenses(transaction1, transaction2)
  */
 function modifyExpense(index)
 {
-    // Obtain notification buttons
-    const addNotificationButton = document.querySelector('#add-notification');
-    const modifyNotificationButton = document.querySelector('#modify-notification');
+    // Obtain expense buttons
+    const addExpenseButton = document.querySelector('#add-expense');
+    const modifyExpenseButton = document.querySelector('#modify-expense');
 
     // Hide add button and reveal modify button
     openAddExpense();
-    addNotificationButton.classList.add('hidden');
-    modifyNotificationButton.classList.remove('hidden');
+    addExpenseButton.classList.add('hidden');
+    modifyExpenseButton.classList.remove('hidden');
 
-    // To modify notificiation we add notification to specified index
-    modifyNotificationButton.addEventListener('click', function (){
+    // To modify expense we add expense to specified index
+    modifyExpenseButton.addEventListener('click', function (){
         addExpense(index)},
         { signal:abortController.signal }
     );
 }
 
 /**
- * Show or hide modify Expense buttons on the Expense list
+ * Show or hide modify Expense buttons on the Expenses list
  */
-function modifyExpenses()
+function showOrHideModifyExpenses()
 {
     const modifyButtons = document.querySelectorAll(".modify-button");
-
+    const deleteButtons = document.querySelectorAll(".delete-button");
 
     for(let i = 0; i < modifyButtons.length; i++)
     {
         modifyButtons[i].classList.toggle('hidden');
+    }
+
+    //For some reason I couldn't do this in the other for loop
+    //because of an out-of-bound error despite the fact they should
+    //be the same length >:(
+    for (let i = 0; i < deleteButtons.length; i++) {
+        if (!deleteButtons[i].classList.contains('hidden')) {
+            deleteButtons[i].classList.toggle('hidden');
+        }
     }
 }
 
@@ -333,19 +341,29 @@ function deleteExpense()
     account.saveToStorage();
     cancelWarning(); // Make warning dialog disappear
     loadExpense();
-    deleteExpenses(); // Keep the delete options open
+    showOrHideDeleteExpenses(); // Keep the delete options open
 }
 
 /**
- * Open or close delete Expense buttons on the Expense list
+ * Show or hide delete Expense buttons on Expense list
  */
-function deleteExpenses()
+function showOrHideDeleteExpenses()
 {
     const deleteButtons = document.querySelectorAll(".delete-button");
+    const modifyButtons = document.querySelectorAll(".modify-button");
 
     for(let i = 0; i < deleteButtons.length; i++)
     {
         deleteButtons[i].classList.toggle('hidden');
+    }
+
+    //For some reason I couldn't do this in the other for loop
+    //because of an out-of-bound error despite the fact they should
+    //be the same length >:(
+    for (let i = 0; i < modifyButtons.length; i++) {
+        if (!modifyButtons[i].classList.contains('hidden')) {
+            modifyButtons[i].classList.toggle('hidden');
+        }
     }
 }
 
@@ -363,23 +381,23 @@ async function main()
     const confirmDelete = document.querySelector('#confirm-delete');
     const cancelDelete = document.querySelector('#cancel-delete');
 
-    // Notification creation buttons
-    const addNotificationButton = document.querySelector('#add-notification');
-    const cancelNotificationButton = document.querySelector('#cancel-notification');
+    // Expense creation buttons
+    const addExpenseButton = document.querySelector('#add-expense');
+    const cancelExpenseButton = document.querySelector('#cancel-expense');
 
-    // Add notification to account on addButton press
+    // Add expense to account on addButton press
     addButton.addEventListener('click', openAddExpense);
 
-    // Modify notifications of account on button press
-    modifyButton.addEventListener('click', modifyExpenses);
+    // Modify expenses of account on button press
+    modifyButton.addEventListener('click', showOrHideModifyExpenses);
 
-    // Delete notifications prompts
-    deleteButton.addEventListener('click', deleteExpenses);
+    // Delete expenses prompts
+    deleteButton.addEventListener('click', showOrHideDeleteExpenses);
     confirmDelete.addEventListener('click', deleteExpense);
     cancelDelete.addEventListener('click', cancelWarning);
 
-    addNotificationButton.addEventListener('click', function () { addExpense(); });
-    cancelNotificationButton.addEventListener('click', closeAddExpense);
+    addExpenseButton.addEventListener('click', function () { addExpense(); });
+    cancelExpenseButton.addEventListener('click', closeAddExpense);
 
     loadExpense(account);
 }

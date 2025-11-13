@@ -18,8 +18,18 @@
     width: 200px;
 
     border: 5px solid gray;
-    border-radius:10px;
-    border-width: 5px;
+    border-radius:5px;
+    border-width: 3px;
+
+    padding-top:25px;
+    padding-bottom:25px;
+}
+.inputfield{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    margin-bottom:1.5em;
 }
 .selectionarea{
     display:flex;
@@ -32,4 +42,9 @@
 }
 .button{
     background-color:black;
+}
+.date-input {
+    width: 150px;
+
+    margin-right: 20px;
 }

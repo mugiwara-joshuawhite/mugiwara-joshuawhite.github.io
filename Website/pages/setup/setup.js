@@ -4,6 +4,11 @@
  * @since 2025-10-13
  * @description Collection of functions that assist setup page
  */
+
+
+/**
+ * Collection of functions that show/hide sections
+ */
 function showOrHideIncomeSelect() {
 
     const streamSelect = document.querySelector('#stream-selector');
@@ -42,82 +47,95 @@ function showOrHideDistributionSelect() {
 function addStream() {
 
     //Data
-    payDaySelector = document.querySelector('#acc-pay-day');
-    payRateSelector = document.querySelector('#acc-pay-rate');
-    payAmountSelector = document.querySelector('#acc-pay-amount');
-    payNameSelector = document.querySelector('#acc-stream-name');
-    errorText = document.querySelector('#stream-error-text');
+    payNameSelector = document.querySelector('#acc-stream-name');   //Name of income stream
+    payAmountSelector = document.querySelector('#acc-pay-amount');  //Amount for income stream
+    payDaySelector = document.querySelector('#acc-pay-day');    //Next payday
+    payRateTypeSelector = document.querySelector('#acc-pay-rate-type'); //Pay rate type
+    payRateXSelector = document.querySelector('#acc-pay-rate-x');  //Pay rate amount x
+    payRateYSelector = document.querySelector('#acc-pay-rate-y');  //Pay rate amount y
+    errorText = document.querySelector('#stream-error-text');   //Error text @ bottom
 
-    payDay = payDaySelector.value;
-    payRate = payRateSelector.value;
-    payAmount = payAmountSelector.value;
     payName = payNameSelector.value;
+    payAmount = payAmountSelector.value;
+    payDay = new Date(payDaySelector.value.replace('-', '/'));
+    payRecur = [payRateTypeSelector.value, 
+                payRateXSelector.value,
+                payRateYSelector.value];
+    payEnd = new Date("9999/12/31");
 
     //Add stream to account
-    if (payDay === "") {
-        errorText.innerText  = "Set a day of the week for pay!";
+    if (payName === "") {
+        errorText.innerText  = "Set a name for the stream!";
         errorText.classList.remove('hidden');
     }
-    else if (payRate === "") {
-        errorText.innerText  = "Set a pay rate!";
+    else if (payAmount == "" || isNaN(payAmount)) {
+        errorText.innerText = "Set an amount for this stream!";
         errorText.classList.remove('hidden');
     }
-    else if (payAmount === "" || isNaN(payAmount)) {
-        errorText.innerText = "Issue with pay amount!";
-        errorText.classList.remove('hidden');
-    }
-    else if (payName === "") {
-        errorText.innerText = "Set a name for the stream!";
+    else if (payRecur.length < 3) {
+        errorText.innerText = "Either the rate, or the blanks are empty!";
         errorText.classList.remove('hidden');
     }
     else {
-        errorText.classList.add('hidden');
-
-        account.streams.push([payName, payAmount, payRate, payDay]);
-
-        //Reset inputs
-        payDaySelector.value = '';
-        payRateSelector.value = '';
-        payAmountSelector.value = '';
-        payNameSelector.value = '';
+        thisTrans = new Transaction(payName, payAmount, payDay, payRecur, payEnd);
+        account.streams.push(thisTrans);
     }
+
+    //Reset
+    payNameSelector.value = '';
+    payAmountSelector.value = '';
+    payDaySelector.value = new Date(); //Empty Date returns current date
+    payRateTypeSelector.value = '';
+    payRateXSelector.value = '';
+    payRateYSelector.value = '';
+    showOrHideIncomeSelect();
 }
 
 function addExpense() {
 
     //Data
-    expRateSelector = document.querySelector('#acc-expense-rate');
-    expAmountSelector = document.querySelector('#acc-expense-amount');
-    expNameSelector = document.querySelector('#acc-expense-name');
-    errorText = document.querySelector('#expense-error-text');
+    expNameSelector = document.querySelector('#acc-expense-name');   //Name of income stream
+    expAmountSelector = document.querySelector('#acc-expense-amount');  //Amount for income stream
+    expDaySelector = document.querySelector('#acc-expense-duedate');    //Next payday
+    expRateTypeSelector = document.querySelector('#acc-expense-rate-type'); //Pay rate type
+    expRateXSelector = document.querySelector('#acc-expense-rate-x');  //Pay rate amount x
+    expRateYSelector = document.querySelector('#acc-expense-rate-y');  //Pay rate amount y
+    errorText = document.querySelector('#exp-error-text');   //Error text @ bottom
 
-    expRate = expRateSelector.value;
-    expAmount = expAmountSelector.value;
     expName = expNameSelector.value;
+    expAmount = expAmountSelector.value;
+    expDay = expDaySelector.value;
+    expRecur = [expRateTypeSelector.value, 
+                expRateXSelector.value,
+                expRateYSelector.value];
+    expEnd = new Date("9999-12-31");
 
-    //Add expense to account
-    if (expRate === "" || isNaN(expRate)) {
-        errorText.innerText  = "Set a valid expense rate!";
+    //Add stream to account
+    if (expName === "") {
+        errorText.innerText  = "Set a name for the expense!";
         errorText.classList.remove('hidden');
     }
-    else if (expAmount === "" || isNaN(expAmount)) {
-        errorText.innerText = "Set a valid expense amount!";
+    else if (expAmount == "" || isNaN(expAmount)) {
+        errorText.innerText = "Set an amount for this expense!";
         errorText.classList.remove('hidden');
     }
-    else if (expName === "") {
-        errorText.innerText = "Set a name for the expense!";
+    else if (expRecur.length == 0) {
+        errorText.innerText = "Either the rate, or the blanks are empty!";
         errorText.classList.remove('hidden');
     }
     else {
-        errorText.classList.add('hidden');
-
-        account.expenses.push([expName, expAmount, expRate]);
-
-        //Reset inputs
-        expRateSelector.value = '';
-        expAmountSelector.value = '';
-        expNameSelector.value = '';
+        thisTrans = new Transaction(expName, expAmount, expDay, expRecur, expEnd);
+        account.expenses.push(thisTrans);
     }
+
+    //Reset
+    expNameSelector.value = '';
+    expAmountSelector.value = '';
+    expDaySelector.value = new Date(); //Empty Date returns current date
+    expRateTypeSelector.value = '';
+    expRateXSelector.value = '';
+    expRateYSelector.value = '';
+    showOrHideExpenseSelect();
 
 }
 
@@ -146,6 +164,10 @@ function addDistribution() {
         //Reset inputs
         distNameSelector.value = '';
     }
+
+    //Reset
+    distNameSelector.value = '';
+    showOrHideDistributionSelect();
 }
 
 /**
@@ -189,6 +211,48 @@ function checkDistributionTotal(newDistPercent) {
     return totalPercent + parseInt(newDistPercent);
 }
 
+/*
+Shows the Y recurrance option if selecting a type that necessitates it
+*/
+function showRecurranceOptionsStream() {
+
+    payRateTypeSelector = document.querySelector('#acc-pay-rate-type'); //Pay rate type
+    payRateYSelector = document.querySelector('#acc-pay-rate-y');  //Pay rate amount y
+    payRateYLabel = document.querySelector('#label-acc-pay-rate-y');
+
+    //Show Y selector if needed
+    if (payRateTypeSelector.value == "specificDay" || payRateTypeSelector.value == "specificDayOfWeek") {
+        payRateYSelector.classList.remove('hidden');
+        payRateYLabel.classList.remove('hidden');
+    }
+
+    //Hide Y selector if user switches away
+    else {
+        payRateYSelector.classList.add('hidden');
+        payRateYLabel.classList.add('hidden');
+    }
+
+}
+function showRecurranceOptionsExpense() {
+
+    expRateTypeSelector = document.querySelector('#acc-expense-rate-type'); //Pay rate type
+    expRateYSelector = document.querySelector('#acc-expense-rate-y');  //Pay rate amount y
+    expRateYLabel = document.querySelector('#label-acc-expense-rate-y');
+
+    //Show Y selector if needed
+    if (expRateTypeSelector.value == "specificDay" || expRateTypeSelector.value == "specificDayOfWeek") {
+        expRateYSelector.classList.remove('hidden');
+        expRateYLabel.classList.remove('hidden');
+    }
+
+    //Hide Y selector if user switches away
+    else {
+        expRateYSelector.classList.add('hidden');
+        expRateYLabel.classList.add('hidden');
+    }
+
+}
+
 async function main() {
 
     //Load from storage
@@ -197,10 +261,13 @@ async function main() {
     //Elements
     const incomeStreamButton = document.querySelector('#button-add-stream');    //Add Income Stream Button
     const submitButton = document.querySelector('#button-submit-stream');   //Submit Income Stream Button
+
     const expenseButton = document.querySelector('#button-add-expense');    //Add Expense Button
     const submitExpenseButton = document.querySelector('#button-submit-expense'); //Submit Expense Button
+
     const distributionButton = document.querySelector('#button-add-distribution');  //Add Distribution Button
     const submitDistributionButton = document.querySelector('#button-submit-distribution'); //Submit Distribution Button
+
     const distSlider = document.querySelector('#acc-distribution-percent'); //Distribution Percentage Slider
     const percentage = document.querySelector('#percent')   //Percentage Display
 
@@ -209,8 +276,10 @@ async function main() {
     //Listeners
     incomeStreamButton.addEventListener('click', showOrHideIncomeSelect);   //Upon clicking "Add Income Stream" button
     submitButton.addEventListener('click', addStream);  //Upon clicking "Submit" button for Income Stream
+
     expenseButton.addEventListener('click', showOrHideExpenseSelect);   //Upon clicking "Add Expense" button
     submitExpenseButton.addEventListener('click', addExpense);  //Upon clicking "Submit" button for Expense
+
     distributionButton.addEventListener('click', showOrHideDistributionSelect); //Upon clicking "Add Distribution" button
     submitDistributionButton.addEventListener('click', addDistribution);    //Upon clicking "Submit" button for Distribution
 

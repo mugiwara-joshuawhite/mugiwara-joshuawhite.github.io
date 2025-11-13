@@ -1,5 +1,5 @@
 /* Page layout (totally not copy pasted) */
-.expense-page {
+.distribution-page {
     height: 95vh;
 
     display: flex;
@@ -7,7 +7,7 @@
     
 }
 
-.expense-tabs {
+.distribution-tabs {
     display: flex;
     flex-direction: column;
 
@@ -15,13 +15,13 @@
     background-color: #565a5c;
 }
 
-.expense-details {
+.distribution-details {
     display: flex;
     flex-direction: column;
     width: 75%;
 }
 
-.expense-title {
+.distribution-title {
     font-size: xx-large;
     font-weight: bold;
 
@@ -35,8 +35,8 @@
 }
 
 
-/* Expense List */
-.expense-list {
+/* distribution List */
+.distribution-list {
     max-width: 100%;
     margin: 0;
     padding: 0;
@@ -57,7 +57,7 @@
 
 .transaction-text {
     display: block;
-    width: 25%;
+    width: 75%;
 
     padding: 10px;
     margin: 0;
@@ -66,27 +66,7 @@
     box-sizing: border-box;
 }
 
-.type-text {
-    padding: 10px;
-    margin: 0;
-
-    width: 25%;
-    text-align: left;
-
-    box-sizing: border-box;
-}
-
 .amount-text {
-    padding: 10px;
-    margin: 0;
-
-    width: 25%;
-    text-align: left;
-
-    box-sizing: border-box;
-}
-
-.reoccurance-text {
     padding: 10px;
     margin: 0;
 
@@ -194,7 +174,7 @@
     margin-right: 20px;
 }
 
-.expense-detail-box {
+.distribution-detail-box {
     justify-self: center;
     width: 50%;
 }
@@ -235,4 +215,13 @@
 
 .is-recurring {
     text-align: center;
+}
+
+.slider-container{
+    display:flex;
+    align-items:center;
+    gap:0.5em;
+}
+.slider{
+    flex: 1
 }

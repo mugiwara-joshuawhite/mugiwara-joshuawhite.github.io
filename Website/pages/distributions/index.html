@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Monetally</title>
+
+        <link rel="stylesheet" href="../../styles/default.css">
+        <link rel="stylesheet" href="distributions.css">
+    </head>
+
+    <body>
+        <!-- TODO: Find a way to not have to duplicate this each page -->
+        <div class="nav-bar">
+            <p class="nav-name">
+                Monetally
+            </p>
+            <div class="nav-buttons">
+                <a href="../home/" class="nav-button"> Home </a>
+                <a href="../income/" class="nav-button"> Income  </a>
+                <a href="../expense" class="nav-button"> Expense </a>
+                
+                <a href="../notification" class="nav-button notification-button"> Notifications
+                    <iframe src="../notification/tooltip.html" class="notification-tooltip"></iframe>
+                </a>
+
+                <a href="../distributions/index.html" class="nav-button distribution-button">Distributions</a>
+
+                <a href="../account" class="nav-button"> Account </a>
+            </div>
+        </div>
+        <!-- TODO: Find a way to not have to duplicate this each page -->
+
+        <dialog open class="create-box hidden">
+            <label for="distribution-text" style="font-weight: bold;">Distribution Name</label>
+            <input type="text" class="small-text-input" id="distribution-text" placeholder="Savings"></input><br>
+
+            <div class="slider-container">
+                <label for="distribution-percentage" style="font-weight: bold;">Percentage</label>
+                <input type="range" class="slider" id="distribution-amount" placeholder="25" min="1" max="100"></input>
+                <p id="percent">x%</p>
+            </div>
+
+            <button class="button" id="add-distribution"> Add </button>
+            <button class="button" id="modify-distribution"> Modify </button>
+            <button class="button" id="cancel-distribution"> Cancel </button>
+
+            <p class="hidden error-text" id="error-add"> Error Text </p>
+        </dialog>
+
+        <!-- Confirm Deletion Dialog -->
+        <dialog open class="delete-box hidden">
+            <p class="delete-button" style="font-weight: bold;" id="delete-warning">Are you sure you want to delete this distribution?</p>
+            <p class="delete-button" style="font-weight: bold;" id="delete-warning">This action cannot be undone.</p>            
+
+            <button class="evil-button" id="confirm-delete"> Yes </button>
+            <button class="button" id="cancel-delete"> No </button>
+
+            <p class="error-text hidden"> Error Text </p>
+        </dialog>
+
+
+        <div class="distribution-page">
+            <div class="distribution-tabs">
+                <button class="button" id="add-button"> Add Distribution </button>
+                <button class="button" id="modify-button"> Modify Distribution </button>
+                <button class="button" id="delete-button"> Delete Distribution </button>
+            </div>
+
+            <!-- Income Display -->
+            <div class="distribution-details">
+                <p class="distribution-title"> Distributions </p>
+
+                <div class="bar"> </div>
+                <div class="categories">
+                    <p class="transaction-text"> <strong> Name </strong> </p>
+                    <p class="amount-text"> <strong> Percentage </strong> </p>
+                </div>
+                <div class="bar"> </div>
+
+                <ol class="distribution-list">
+                </ol>
+
+            </div>
+            
+        </div>
+
+
+        <script src="../../scripts/user-data.js"></script>
+        <script src="distributions.js"></script>
+    </body>
+</html>
