@@ -344,9 +344,95 @@ function prettyRecurrance(recurrance) {
     return prettyRate;
 }
 
+/**
+ * @description Makes a graph based on the account's unallocated income and expenses. Ignores income that was set aside of a distribution
+ */
+function makeGraph()
+{
+    let totalIncome = [];
+    let incomeSum = 0;
+    let totalExpenses = [];
+    let expenseSum = 0;
+    let distributed = 0;
+    const incomeArray = account.streams;
+    const expenseArray = account.expenses;
+    const dists = account.distributions;
+    let today = new Date();
+
+    // Get a month ago as a date
+    let lastMonth = new Date();
+    lastMonth.setMonth(lastMonth.getMonth() - 1);
+
+    // Get percentage of distribution
+    for (let i = 0; i < dists.length; i++)
+    {
+        distributed += Number(dists[i][1]);
+    }
+    console.log(distributed)
+    distributed = 1 - distributed/100;
+    console.log(distributed)
+
+    // Get relevant income objects
+    for (let i = 0; i < incomeArray.length; i++)
+    {
+        if (new Date(incomeArray[i].date) > lastMonth && new Date(incomeArray[i].date) <= today)
+        {
+            totalIncome.push(incomeArray[i]);
+            temp = incomeArray[i].amount;
+            incomeSum += temp * distributed
+            console.log(incomeSum)
+        }
+    }
+
+    // Get relevant expense objects
+    for (let i = 0; i < expenseArray.length; i++)
+    {
+        if (new Date(expenseArray[i].date) > lastMonth && new Date(expenseArray[i].date) <= today)
+        {
+            totalExpenses.push(expenseArray[i]);
+            expenseSum += expenseArray[i].amount;
+        }
+    }
+    let netBalance = incomeSum - expenseSum;
+
+    // Constrcut Graph
+    let graphTitle = "PANIC PANIC PANIC"
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Transaction');
+    data.addColumn('number', 'Amount');
+    
+    if (netBalance > 0)
+    {
+        data.addRow(["Unallocated Income", netBalance]);
+        graphTitle = "good for now..."
+    }
+
+    for (let i = 0; i < totalExpenses.length; i++)
+    {
+        data.addRow([totalExpenses[i].text, Number(totalExpenses[i].amount)]);
+        console.log("hi")
+    }
+    
+    //data.addRows([
+    //    ['a', 3],
+    //    ['b', 1],
+    //    ['c', 1],
+    //    ['d', 1],
+    //    ['e', 2]]);
+
+    var options = {'title':graphTitle,
+        'width':400,
+        'height':300};
+    
+    var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+    chart.draw(data, options);
+}
+
 
 async function main() {
     await account.loadFromStorage();
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(makeGraph);
 
     loadIncome();
     loadExpense();
