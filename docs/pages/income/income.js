@@ -90,13 +90,32 @@ function openAddIncome()
     const addNotificationButton = document.querySelector('#add-income');  //Add Transaction -> Add
     const modifyNotificationButton = document.querySelector('#modify-income');
 
+    const transactionTextInput = document.querySelector('#transaction-text');   //Transaction name input
+    const transactionAmountInput = document.querySelector('#transaction-amount');   //Transaction amount input
+    const transactionDateInput = document.querySelector('#income-date');  //Next pay date
+    const recurringInput = document.querySelector('#transaction-recurring');    //Is recurring?
+    const recurringIntervalInput = document.querySelector('#recurring-interval');   //How often does recur?
+    const endDateInput = document.querySelector('#end-date');   //When ends
+    const xInput = document.querySelector('#x-text');   //Every x day
+    const weekdayDropdown = document.querySelector('#weekday-dropdown');    //Weekday dropdown
+    const yInput = document.querySelector('#y-text');   //Of every y timeframe
+
     // Reveal add button
     addNotificationButton.classList.remove('hidden');
     modifyNotificationButton.classList.add('hidden');
 
     // clear input fields on open
-    // transactionTextInput.value = "";
-    // transactionDateInput.value = "";
+    transactionTextInput.value = "";
+    transactionDateInput.value = "";
+    transactionAmountInput.value = "";
+    recurringInput.checked = false;
+    showRecurring();
+    recurringIntervalInput.value = "daily";
+    endDateInput.value = "";
+    xInput.value = "";
+    weekdayDropdown.value = "Monday";
+    yInput.value = "";
+
 
     // Hide error text, and reveal createbox when it's ready
     errorText.classList.add('hidden'); 

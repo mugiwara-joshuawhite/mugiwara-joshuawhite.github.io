@@ -412,13 +412,6 @@ function makeGraph()
         data.addRow([totalExpenses[i].text, Number(totalExpenses[i].amount)]);
         console.log("hi")
     }
-    
-    //data.addRows([
-    //    ['a', 3],
-    //    ['b', 1],
-    //    ['c', 1],
-    //    ['d', 1],
-    //    ['e', 2]]);
 
     var options = {'title':graphTitle,
         'width':400,
