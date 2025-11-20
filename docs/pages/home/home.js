@@ -359,6 +359,15 @@ function makeGraph()
     const dists = account.distributions;
     let today = new Date();
 
+    days = new Map()
+    days.set("Sunday", 0)
+    days.set("Monday", 1)
+    days.set("Tuesday", 2)
+    days.set("Wednesday", 3)
+    days.set("Thursday", 4)
+    days.set("Friday", 5)
+    days.set("Saturday", 6)
+
     // Get a month ago as a date
     let lastMonth = new Date();
     lastMonth.setMonth(lastMonth.getMonth() - 1);
@@ -368,9 +377,7 @@ function makeGraph()
     {
         distributed += Number(dists[i][1]);
     }
-    console.log(distributed)
     distributed = 1 - distributed/100;
-    console.log(distributed)
 
     // Get relevant income objects
     for (let i = 0; i < incomeArray.length; i++)
@@ -380,17 +387,60 @@ function makeGraph()
             totalIncome.push(incomeArray[i]);
             temp = incomeArray[i].amount;
             incomeSum += temp * distributed
-            console.log(incomeSum)
         }
     }
 
     // Get relevant expense objects
     for (let i = 0; i < expenseArray.length; i++)
     {
-        if (new Date(expenseArray[i].date) > lastMonth && new Date(expenseArray[i].date) <= today)
+        if (expenseArray[i].recurrance.length == 0)
         {
-            totalExpenses.push(expenseArray[i]);
-            expenseSum += expenseArray[i].amount;
+            if (new Date(expenseArray[i].date) > lastMonth && new Date(expenseArray[i].date) <= today)
+            {
+                totalExpenses.push(expenseArray[i]);
+                expenseSum += expenseArray[i].amount;
+            }
+        }
+
+        else // i hate recurrance
+        {
+            var inScope = true
+            var tempDate = new Date(expenseArray[i].date)
+            while (inScope)
+            {
+                if (tempDate > lastMonth && tempDate <= today)
+                {
+                    totalIncome.push(expenseArray[i]);
+                    temp = expenseArray[i].amount;
+                    expenseSum += temp * distributed
+                }
+
+                switch(expenseArray[i].recurrance[0])
+                {
+                    case "daily":
+                        tempDate.setDate(tempDate.getDate() + expenseArray[i].recurrance[1])
+                        break;
+                    case "monthly":
+                        tempDate.setMonth(tempDate.getMonth() + expenseArray[i].recurrance[1])
+                        break;
+                    case "yearly":
+                        tempDate.setFullYear(tempDate.getFullYear() + expenseArray[i].recurrance[1])
+                        break;
+                    case "specificDay":
+                        tempDate.setMonth(tempDate.getMonth() + expenseArray[i].recurrance[2])
+                        tempDate.setDate(expenseArray[i].recurrance[1])
+                        break;
+                    case "specificDayOfWeek":
+                        tempDate.setMonth(tempDate.getMonth() + expenseArray[i].recurrance[2])
+                        tempDate.setDate(1)
+                        if (tempDate.getDay < days.get(expenseArray[i].recurrance[3]))
+                        {
+                            tempDate.setDate(tempDate.getDate() + (tempDate.getDay()))
+                        }
+                    default:
+                        break;
+                }
+            }
         }
     }
     let netBalance = incomeSum - expenseSum;
@@ -413,9 +463,18 @@ function makeGraph()
         console.log("hi")
     }
 
-    var options = {'title':graphTitle,
-        'width':400,
-        'height':300};
+    var chartArea = document.getElementById('chart_div');
+    document.getElementById('chart-title').innerHTML = `<p class="cool-title" >${graphTitle}</p>`;
+    var options = {
+        'width': chartArea.width,
+        'height': chartArea.height,
+        'legend': {
+            position: 'labeled',
+            textStyle: {color: 'white', fontSize: 16}
+        },
+        'pieSliceText': 'value',
+        'backgroundColor': "#212121"
+        };
     
     var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
     chart.draw(data, options);

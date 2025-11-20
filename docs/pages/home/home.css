@@ -22,7 +22,10 @@ li {
 
 
 .graphic-section {
-    margin: 100px;
+    margin: auto;
+    display: block;
+    width: 75%;
+    height: 50%;
 }
 
 /* ##### HOME PAGE FINANCE INFO ##### */
@@ -53,6 +56,26 @@ li {
     padding-bottom: 15px;
 
     margin: 0px;
+    margin-bottom: 10px;
+
+    font-size: xx-large;
+    font-weight: bolder;
+    text-shadow: 1px 1px 4px black;
+
+    border-radius: 25px;
+    border-style: solid;
+    border-width: 4px;
+}
+
+.cool-title {
+    width: 50%;
+    display: block;
+
+    background-color: #454849;
+    padding-top: 15px;
+    padding-bottom: 15px;
+
+    margin: auto;
     margin-bottom: 10px;
 
     font-size: xx-large;
