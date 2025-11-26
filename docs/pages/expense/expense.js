@@ -83,9 +83,15 @@ function openAddExpense()
     const createBox = document.querySelector(".create-box");
     const errorText = document.querySelector('.error-text');
 
-    //Commented these out cause they weren't being used.
-    //const transactionTextInput = document.querySelector('#transaction-text');
-    //const transactionDateInput = document.querySelector('#expense-date');
+    const transactionTextInput = document.querySelector('#transaction-text');   //Transaction name input
+    const transactionAmountInput = document.querySelector('#transaction-amount');   //Transaction amount input
+    const transactionDateInput = document.querySelector('#expense-date');  //Next pay date
+    const recurringInput = document.querySelector('#transaction-recurring');    //Is recurring?
+    const recurringIntervalInput = document.querySelector('#recurring-interval');   //How often does recur?
+    const endDateInput = document.querySelector('#end-date');   //When ends
+    const xInput = document.querySelector('#x-text');   //Every x day
+    const weekdayDropdown = document.querySelector('#weekday-dropdown');    //Weekday dropdown
+    const yInput = document.querySelector('#y-text');   //Of every y timeframe
 
     const addExpenseButton = document.querySelector('#add-expense');
     const modifyExpenseButton = document.querySelector('#modify-expense');
@@ -95,8 +101,16 @@ function openAddExpense()
     modifyExpenseButton.classList.add('hidden');
 
     // clear input fields on open
-    // transactionTextInput.value = "";
-    // transactionDateInput.value = "";
+    transactionTextInput.value = "";
+    transactionDateInput.value = "";
+    transactionAmountInput.value = "";
+    recurringInput.checked = false;
+    showRecurring();
+    recurringIntervalInput.value = "daily";
+    endDateInput.value = "";
+    xInput.value = "";
+    weekdayDropdown.value = "Monday";
+    yInput.value = "";
 
     // Hide error text, and reveal createbox when it's ready
     errorText.classList.add('hidden'); 
@@ -199,7 +213,17 @@ function addExpense(index)
     {
         // Replace dashes in transactionDate with
         let date = new Date(transactionDateInput.value.replace('-', '/'));
-        let endDate = new Date(endDateInput.value.replace('-', '/'));
+         
+        //Changed it so that endDate is same as date if not recurring
+        //as it made endDate null before
+        //Also idk why it's making the dates so detailed now
+        let endDate = new Date();
+        if (recurringInput.checked) {
+            endDate = new Date(endDateInput.value.replace('-', '/'));
+        }
+        else {
+            endDate = new Date(date);
+        }
         
         // Create recurrance array
         let recurrance = [];
