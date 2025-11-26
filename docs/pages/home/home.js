@@ -48,7 +48,7 @@ function loadIncome() {
             upcoming = true;
 
             if (trueNextDate < today) {
-                account.streams[i].date = updateDate(trueNextDate, account.recurrance);
+                account.streams[i].date = updateDate(trueNextDate, account.streams[i].recurrance);
             }
         }
 
@@ -246,7 +246,7 @@ function loadExpense() {
             upcoming = true;
 
             if (trueNextDate < today) {
-                account.expenses[i].date = updateDate(trueNextDate, account.recurrance);
+                account.expenses[i].date = updateDate(trueNextDate, account.expenses[i].recurrance);
             }
         }
 
@@ -559,6 +559,7 @@ function makeGraph()
         {
             var inScope = true
             var tempDate = new Date(incomeArray[i].date)
+            var monthOverflow = false;
 
             while (inScope)
             {
@@ -580,7 +581,29 @@ function makeGraph()
                         tempDate.setDate(tempDate.getDate() + Number(incomeArray[i].recurrance[1]))
                         break;
                     case "monthly":
-                        tempDate.setMonth(tempDate.getMonth() + Number(incomeArray[i].recurrance[1]))
+                        if (!monthOverflow)
+                        {
+                            tempMonth = tempDate.getMonth();
+                            tempDate.setDate(1)
+                            tempDate.setMonth(tempDate.getMonth() + Number(incomeArray[i].recurrance[1]))
+                            tempDate.setDate(new Date(incomeArray[i].date).getDate())
+                            if (tempMonth + 1 != tempDate.getMonth())
+                            {
+                                monthOverflow = true
+                            }
+                        }
+                        else
+                        {
+                            tempMonth = tempDate.getMonth();
+                            tempDate.setDate(1)
+                            tempDate.setMonth(tempDate.getMonth() + Number(incomeArray[i].recurrance[1]) - 1)
+                            tempDate.setDate(new Date(incomeArray[i].date).getDate())
+                            if (tempMonth == tempDate.getMonth())
+                            {
+                                monthOverflow = false
+                            }
+                        }
+                        console.log(new Date(tempDate))
                         break;
                     case "yearly":
                         tempDate.setFullYear(tempDate.getFullYear() + Number(incomeArray[i].recurrance[1]))
@@ -734,8 +757,6 @@ function makeGraph()
 async function main() {
 
     await account.loadFromStorage();
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(makeGraph);
 
     //Elements
     incomeUpcomingButton = document.querySelector("#upcoming-income-label");
@@ -748,8 +769,8 @@ async function main() {
     expenseUpcomingList = document.querySelector("#upcoming-expenses");
     expensePastList = document.querySelector("#past-expenses");
 
-    loadIncome();
-    loadExpense();
+    //loadIncome();
+    //loadExpense();
 
     //Hides or shows upcoming/past income/expenses
     incomeUpcomingButton.addEventListener('click', function() {
@@ -784,6 +805,9 @@ async function main() {
             expensePastList.classList.add('hidden');
         }
     })
+
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(makeGraph);
     
 }
 
