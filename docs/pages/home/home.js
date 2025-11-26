@@ -612,15 +612,15 @@ function makeGraph()
                         tempDate.setDate(Number(incomeArray[i].recurrance[1]))
                         break;
                     case "specificDayOfWeek":
-                        tempDate.setMonth(tempDate.getMonth() + Number(incomeArray[i].recurrance[2])) // Go to correct month to start at (last one + 1)
                         tempDate.setDate(1) // Go to the first day of the month
+                        tempDate.setMonth(tempDate.getMonth() + Number(incomeArray[i].recurrance[2])) // Go to correct month to start at (last one + 1)
                         
-                        while (tempDate.getDay() != days.get(incomeArray[i].recurrance[4])) // Add until we get to the first specified weekday of that month
+                        while (tempDate.getDay() != days.get(incomeArray[i].recurrance[3])) // Add until we get to the first specified weekday of that month
                         {
-                            tempDate.setDate(tempDate.getDate() + Number(incomeArray[i].recurrance[1]))
+                            tempDate.setDate(tempDate.getDate() + 1)
                         }
 
-                        for (let i = 1; i < incomeArray[i].recurrance[1]; i++) // Move to correct month
+                        for (let i = 1; i < Number(incomeArray[i].recurrance[1]); i++) // Move to correct week
                         {
                             tempDate.setDate(tempDate.getDate() + 7)
                         }
@@ -700,15 +700,15 @@ function makeGraph()
                         tempDate.setDate(Number(expenseArray[i].recurrance[1]))
                         break;
                     case "specificDayOfWeek":
-                        tempDate.setMonth(tempDate.getMonth() + Number(expenseArray[i].recurrance[2])) // Go to correct month to start at (last one + 1)
                         tempDate.setDate(1) // Go to the first day of the month
+                        tempDate.setMonth(tempDate.getMonth() + Number(expenseArray[i].recurrance[2])) // Go to correct month to start at (last one + 1)
                         
-                        while (tempDate.getDay() != days.get(expenseArray[i].recurrance[4])) // Add until we get to the first specified weekday of that month
+                        while (tempDate.getDay() != days.get(expenseArray[i].recurrance[3])) // Add until we get to the first specified weekday of that month
                         {
-                            tempDate.setDate(tempDate.getDate() + Number(expenseArray[i].recurrance[1]))
+                            tempDate.setDate(tempDate.getDate() + 1)
                         }
 
-                        for (let i = 1; i < expenseArray[i].recurrance[1]; i++) // Move to correct month
+                        for (let i = 1; i < Number(expenseArray[i].recurrance[1]); i++) // Move to correct week
                         {
                             tempDate.setDate(tempDate.getDate() + 7)
                         }
