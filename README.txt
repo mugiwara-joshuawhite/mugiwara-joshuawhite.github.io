@@ -3,6 +3,11 @@ CREATORS: JEFFERY KOTZ / ROY RODRIGUEZ / RYAN RUPAKHETI / JOSHUA WHITE
 UNDER ZLIB LICENSE A.O. 2025/12/01
 ==WE DO NOT CLAIM TO BE FINANCIAL ADVISORS. WE ARE NOT PROFESSIONAL ECONOMISTS==
 
+Languages:
+- HTML
+- CSS
+- JavaScript
+
 Monetally is a financial support website where the user can get a broader view of their finances, and help themselves be more financially literate.
 A user may:
 - Input income streams and regular expenses.
