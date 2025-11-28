@@ -770,7 +770,8 @@ function makeGraph()
             textStyle: {color: 'white', fontSize: 16}
         },
         'pieSliceText': 'value',
-        'backgroundColor': "#212121"
+        'backgroundColor': "#212121",
+        colors: ['#56c951', '#ff2b00', '#ff421f', '#ff5638', '#ff6e54', '#ff846e', '#ffa391', '#ffbfb3']
         };
     
     var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
