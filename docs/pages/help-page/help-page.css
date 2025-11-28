@@ -1,0 +1,33 @@
+/* Page layout (totally not copy pasted) */
+.help_page {
+    height: 95vh;
+
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.help_page-title {
+    font-size: xx-large;
+    font-weight: bold;
+
+    margin: 5px;
+
+}
+
+.bar {
+    height: 1px;
+    background-color: #565a5c;
+}
+
+
+.help_pageheaders {
+    font-size: x-large;
+    font-weight: bold;
+    text-align: left;
+}
+
+li{
+    font-size: medium;
+    text-align:left
+}
