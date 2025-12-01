@@ -137,9 +137,16 @@ async function addDistribution(index) {
     const errorText = document.querySelector('#error-add');
     const xperc = document.querySelector('#percent');
 
+    //Other
+        //If not modifying, the later code will subtract by 0 which is what I want
+    let modifyingDistributionAmount = 0;
+    if (Number.isInteger(index)) {
+        modifyingDistributionAmount = account.distributions[index][1];
+    }
+
     //Check for valid input
     if (distName.value != "") {
-        if (checkDistributionTotal(distAmount.value) <= 100) {
+        if (checkDistributionTotal(distAmount.value) - modifyingDistributionAmount <= 100) {
             if (Number.isInteger(index)) {
                 account.distributions[index] = 
                     [distName.value, distAmount.value];
@@ -206,7 +213,7 @@ function modifyDistribution(index)
     addDistButton.classList.add('hidden');
     modifyDistButton.classList.remove('hidden');
 
-    // To modify expense we add expense to specified index
+    // To modify distribution we add expense to specified index
     modifyDistButton.addEventListener('click', function (){
         addDistribution(index)},
         { signal:abortController.signal }
