@@ -93,7 +93,7 @@ async function login()
     const file = fileInput.files[0];
 
     // if valid file was given verify account details
-    if (validJSONFile(file))
+    if (validJSONFile(file) && (username + password).length > 0)
     {
         fileInput.classList.remove('red-border');
 
